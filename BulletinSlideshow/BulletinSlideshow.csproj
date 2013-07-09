@@ -128,9 +128,15 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Administrator\AdministratorAreaRegistration.cs" />
+    <Compile Include="Areas\Administrator\Controllers\CategoryController.cs" />
+    <Compile Include="Areas\Administrator\Controllers\InformationController.cs" />
+    <Compile Include="Areas\Administrator\Controllers\MemberController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\BulletinSlideshowContext.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Configurations.cs" />
     <Compile Include="Models\Information.cs" />
@@ -209,6 +215,23 @@
     <Content Include="Content\font\fontawesome-webfont.ttf" />
     <Content Include="Content\font\fontawesome-webfont.eot" />
     <Content Include="Content\font\FontAwesome.otf" />
+    <Content Include="Areas\Administrator\Views\Web.config" />
+    <Content Include="Areas\Administrator\Views\Information\Index.cshtml" />
+    <Content Include="Areas\Administrator\Views\Information\Details.cshtml" />
+    <Content Include="Areas\Administrator\Views\Information\Create.cshtml" />
+    <Content Include="Areas\Administrator\Views\Information\Edit.cshtml" />
+    <Content Include="Areas\Administrator\Views\Information\Delete.cshtml" />
+    <Content Include="Areas\Administrator\Views\Category\Index.cshtml" />
+    <Content Include="Areas\Administrator\Views\Category\Details.cshtml" />
+    <Content Include="Areas\Administrator\Views\Category\Create.cshtml" />
+    <Content Include="Areas\Administrator\Views\Category\Edit.cshtml" />
+    <Content Include="Areas\Administrator\Views\Category\Delete.cshtml" />
+    <Content Include="Areas\Administrator\Views\Member\Index.cshtml" />
+    <Content Include="Areas\Administrator\Views\Member\Details.cshtml" />
+    <Content Include="Areas\Administrator\Views\Member\Create.cshtml" />
+    <Content Include="Areas\Administrator\Views\Member\Edit.cshtml" />
+    <Content Include="Areas\Administrator\Views\Member\Delete.cshtml" />
+    <Content Include="Areas\Administrator\Views\Shared\_Layout.cshtml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -237,10 +260,12 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Administrator\Views\_ViewStart.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
+    <Folder Include="Areas\Administrator\Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

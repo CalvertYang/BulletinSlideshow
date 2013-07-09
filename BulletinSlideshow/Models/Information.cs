@@ -12,13 +12,13 @@ namespace BulletinSlideshow.Models
         [Key]
         public int Id { get; set; }
 
-        [Required, Display(Name = "項目內容")]
+        [Required, Display(Name = "佈告內容")]
         public string Content { get; set; }
 
-        [ForeignKey("Category"), Display(Name = "項目分類")]
+        [ForeignKey("Category"), Display(Name = "佈告分類")]
         public int CategoryId { get; set; }
 
-        [Display(Name = "項目分類")]
+        [Display(Name = "佈告分類")]
         public Category Category { get; set; }
 
         [Display(Name = "建立日期"), DatabaseGenerated(DatabaseGeneratedOption.Computed)]

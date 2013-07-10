@@ -4,6 +4,33 @@
     ViewBag.Title = "分類管理";
 }
 
+@section scripts{
+    <script>
+        function Delete(id, name) {
+            bootbox.confirm("您確定要刪除 <b>" + name + " </b>嗎?", function (result) {
+                if (result) {
+                    var url = '@Url.RouteUrl("Administrator", new { controller = "Category", action = "Delete" })/' + id;
+                    var form = $('#__AjaxAntiForgeryForm');
+                    var token = $('input[name="__RequestVerificationToken"]', form).val();
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: {
+                            __RequestVerificationToken: token
+                        },
+                        success: function () { location.reload(); }
+                    });
+                }
+            });
+        }
+    </script>
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+
 <div class="span12">
     <div class="row">
         <h3>分類管理</h3>
@@ -12,7 +39,7 @@
         <table class="table table-bordered table-striped">
             <tr>
                 <th>@Html.DisplayNameFor(model => model.Name)</th>
-                <th>@Html.RouteLink("新增", "Administrator", new { controller = "Category", action = "Create" }, new { @class = "btn btn-small btn-success" })</th>
+                <th class="span2">@Html.RouteLink("新增", "Administrator", new { controller = "Category", action = "Create" }, new { @class = "btn btn-small btn-success" })</th>
             </tr>
             @foreach (var item in Model)
             {
@@ -22,7 +49,7 @@
                     </td>
                     <td>
                         @Html.RouteLink("編輯", "Administrator", new { controller = "Category", action = "Edit", id = item.Id }, new { @class = "btn btn-small btn-primary" })
-                       <button class='delete-button btn btn-small btn-danger' onclick='DeleteWithConfirm(@item.Id);'>刪除</button>
+                       <button class='delete-button btn btn-small btn-danger' onclick='Delete(@item.Id, "@item.Name");'>刪除</button>
                     </td>
                 </tr>
             }

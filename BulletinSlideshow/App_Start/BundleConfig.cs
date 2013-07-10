@@ -24,11 +24,18 @@ namespace BulletinSlideshow
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include("~/Scripts/bootstrap.js"));
+            bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
+                        "~/Scripts/angular*"));
+
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+                        "~/Scripts/bootstrap.js",
+                        "~/Scripts/bootbox.js"));
             #endregion
 
             #region CSS
-            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
+            bundles.Add(new StyleBundle("~/Content/css").Include(
+                        "~/Content/normalize.css",
+                        "~/Content/site.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",
@@ -45,10 +52,10 @@ namespace BulletinSlideshow
                         "~/Content/themes/base/jquery.ui.theme.css"));
 
             // Bootstrap
-            bundles.Add(new StyleBundle("~/Content/bootstrap")
-                 .Include("~/Content/bootstrap.css")
-                 .Include("~/Content/bootstrap-responsive.css")
-                 .Include("~/Content/font-awesome.css"));
+            bundles.Add(new StyleBundle("~/Content/bootstrap").Include(
+                        "~/Content/bootstrap.css",
+                        "~/Content/bootstrap-responsive.css",
+                        "~/Content/font-awesome.css"));
             #endregion
         }
     }

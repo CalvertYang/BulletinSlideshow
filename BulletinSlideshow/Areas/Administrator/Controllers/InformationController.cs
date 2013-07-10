@@ -9,6 +9,7 @@ using BulletinSlideshow.Models;
 
 namespace BulletinSlideshow.Areas.Administrator.Controllers
 {
+    [Authorize]
     public class InformationController : Controller
     {
         private BulletinSlideshowContext db = new BulletinSlideshowContext();
@@ -85,6 +86,8 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
         {
             if (ModelState.IsValid)
             {
+                information.LastUpdateOn = DateTime.Now;
+
                 db.Entry(information).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

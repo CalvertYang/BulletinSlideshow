@@ -1,0 +1,41 @@
+﻿@model BulletinSlideshow.Models.Member
+@{
+    ViewBag.Title = "登入";
+}
+
+<div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        
+
+        <div style="width: auto; display: block;">
+            <fieldset style="width: 220px; margin: 0 auto;">
+                <legend>登入</legend>
+                @*<div class="editor-label">
+                    @Html.LabelFor(model => model.Account)
+                </div>*@
+                <div class="editor-field">
+                    @*@Html.EditorFor(model => model.Account)*@
+                    @Html.TextBoxFor(model => model.Account, new { placeholder = "帳號" })
+                    @Html.ValidationMessageFor(model => model.Account)
+                </div>
+
+                @*<div class="editor-label">
+                    @Html.LabelFor(model => model.Password)
+                </div>*@
+                <div class="editor-field">
+                    @*@Html.EditorFor(model => model.Password)*@
+                    @Html.TextBoxFor(model => model.Password, new { type = "Password", placeholder = "密碼" })
+                    @Html.ValidationMessageFor(model => model.Password)
+                </div>
+                @Html.ValidationSummary(true)
+                <div class="row">
+                    <div class="pull-right span1">
+                        <button class="btn btn-primary" type="submit">登入</button>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    }
+</div>

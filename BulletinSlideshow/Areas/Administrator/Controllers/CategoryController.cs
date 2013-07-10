@@ -9,6 +9,7 @@ using BulletinSlideshow.Models;
 
 namespace BulletinSlideshow.Areas.Administrator.Controllers
 {
+    [Authorize]
     public class CategoryController : Controller
     {
         private BulletinSlideshowContext db = new BulletinSlideshowContext();
@@ -88,25 +89,9 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
             return View(category);
         }
 
-        //
-        // GET: /Administrator/Category/Delete/5
-
-        public ActionResult Delete(int id = 0)
-        {
-            Category category = db.Categories.Find(id);
-            if (category == null)
-            {
-                return HttpNotFound();
-            }
-            return View(category);
-        }
-
-        //
-        // POST: /Administrator/Category/Delete/5
-
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Delete(int id)
         {
             Category category = db.Categories.Find(id);
             db.Categories.Remove(category);

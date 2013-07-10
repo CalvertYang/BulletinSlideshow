@@ -4,57 +4,63 @@
     ViewBag.Title = "帳號管理";
 }
 
-@*<h2>Index</h2>
+@section scripts{
+    <script>
+        @*function Delete(id, name) {
+            bootbox.confirm("您確定要刪除 <b>" + name + " </b>嗎?", function (result) {
+                if (result) {
+                    var url = '@Url.RouteUrl("Administrator", new { controller = "Member", action = "Delete" })/' + id;
+                    var form = $('#__AjaxAntiForgeryForm');
+                    var token = $('input[name="__RequestVerificationToken"]', form).val();
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: {
+                            __RequestVerificationToken: token
+                        },
+                        success: function () { location.reload(); }
+                    });
+                }
+            });
+        }*@
+        var currentId;
+        $('.edit-password').click(function () {
+            currentId = $(this).data('id');
+            $('#editModal').modal('toggle');
+        })
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table>
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Account)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Password)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreateDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastLoginOn)
-        </th>
-        <th></th>
-    </tr>
+        $('#savePassword').click(function () {
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+            if (currentId) {
+                var uid = currentId;
+            }
+            var pwd = $('input[name="newPassword"]').val();
+            var cpwd = $('input[name="confirmPassword"]').val();
+            if (!pwd || 0 === pwd.length) // javascript tip for check string is empty or null
+            {
+                alert("Please input new password"); // TODO: modify to bootbox
+                return false;
+            } else if (pwd != cpwd) {
+                alert('Password not the same'); // TODO: modify to bootbox
+                return false;
+            }
+            $.post('/Administrator/Member/ChangePassword', { id: uid, password: pwd, __RequestVerificationToken: token })
+                .done(function () {
+                    $('#editModal').modal('hide');
+                }).fail(function () {
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Account)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Password)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreateDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastLoginOn)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+                });
+            $('input[name="newPassword"]').val("");
+            $('input[name="confirmPassword"]').val("");
+        });
+    </script>
 }
 
-</table>*@
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
 
 <div class="span12">
     <div class="row">
@@ -65,25 +71,56 @@
             <tr>
                 <th>@Html.DisplayNameFor(model => model.Account)</th>
                 <th>@Html.DisplayNameFor(model => model.Name)</th>
-                <th>@Html.DisplayNameFor(model => model.CreateOn)</th>
-                <th>@Html.DisplayNameFor(model => model.LastLoginOn)</th>
-                <th>@Html.RouteLink("新增", "Administrator", new { controller = "Member", action = "Create" }, new { @class = "btn btn-small btn-success" })</th>
+                <th class="span2">@Html.DisplayNameFor(model => model.CreateOn)</th>
+                <th class="span2">@Html.DisplayNameFor(model => model.LastLoginOn)</th>
+                <th class="span2">@Html.RouteLink("新增", "Administrator", new { controller = "Member", action = "Create" }, new { @class = "btn btn-small btn-success" })</th>
             </tr>
             @foreach (var item in Model)
             {
+                if (item.Account == "admin") { continue; }
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Account)
-                        @Html.DisplayFor(modelItem => item.Name)
-                        @Html.DisplayFor(modelItem => item.CreateOn)
-                        @Html.DisplayFor(modelItem => item.LastLoginOn)
-                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.Account)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CreateOn)</td>
+                    <td>@Html.DisplayFor(modelItem => item.LastLoginOn)</td>
                     <td>
                         @Html.RouteLink("編輯", "Administrator", new { controller = "Member", action = "Edit", id = item.Id }, new { @class = "btn btn-small btn-primary" })
-                       <button class='delete-button btn btn-small btn-danger' onclick='DeleteWithConfirm(@item.Id);'>刪除</button>
+                        @if (User.Identity.Name == "admin" || User.Identity.Name == "thomas" || item.Account == User.Identity.Name)
+                        {
+                        <button class='btn btn-small btn-warning edit-password' data-id='@item.Id'>變更密碼</button>
+                        @*<button class='delete-button btn btn-small btn-danger' onclick='Delete(@item.Id, "@item.Account");'>刪除</button>*@
+                        }
                     </td>
                 </tr>
             }
         </table>
     </div>
 </div>
+
+<!-- change password -->
+ <div id="editModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 class="brand">Change Password</h3>
+    </div>
+    <div class="modal-body">
+        <div class="control-group">
+            <label class="control-label" for="newPassword">New Password</label>
+            <div class="controls">
+                <input type="password" id="newPassword" name="newPassword" />
+            </div>
+        </div>
+
+         <div class="control-group">
+            <label class="control-label" for="confirmPassword">Confirm Password</label>
+            <div class="controls">
+                <input  type="password" id="confirmPassword" name="confirmPassword"/>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+    <a href="#" class="btn"  data-dismiss="modal">Cancel</a>
+    <a href="#" class="btn btn-primary" id="savePassword">Save changes</a>
+    </div>
+</div>
+

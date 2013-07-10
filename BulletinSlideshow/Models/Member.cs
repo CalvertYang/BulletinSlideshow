@@ -22,11 +22,11 @@ namespace BulletinSlideshow.Models
         public string Name { get; set; }
 
         [Display(Name = "建立日期"), DatabaseGenerated(DatabaseGeneratedOption.Computed), DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime CreateOn { get; set; }
 
-        [Display(Name = "最後登入日期"), DatabaseGenerated(DatabaseGeneratedOption.Computed), DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
-        public DateTime LastLoginOn { get; set; }
+        [Display(Name = "最後登入日期"), DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime? LastLoginOn { get; set; }
     }
 }

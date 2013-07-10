@@ -1,5 +1,41 @@
-﻿@{
-    ViewBag.Title = "Index";
+﻿@model IEnumerable<BulletinSlideshow.Models.Information>
+@section scripts {
+    <script>
+        $(function () {
+            $('#slideTab').liquidSlider({
+                autoSlide: true,
+                autoSlideInterval: 500,
+                autoHeight: false
+            });
+        })
+    </script>
 }
 
-<h2>Index</h2>
+<div class="liquid-slider" id="slideTab">
+    @{ int id = 0; }
+    @foreach (var category in ViewBag.Category)
+    {
+        
+        if (id == category.Id)
+        {
+            continue;
+        }
+        else
+        {
+            id = category.Id;
+        }
+        <div>
+            <h2 class="title">@category.Name</h2>
+            <ul>
+            @foreach (var info in Model)
+            {
+                
+                if (info.CategoryId == id)
+                {
+                    <li>@info.Content</li>
+                }
+            }
+            </ul>
+        </div>
+    }
+</div>

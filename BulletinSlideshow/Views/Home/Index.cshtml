@@ -1,4 +1,9 @@
 ﻿@model IEnumerable<BulletinSlideshow.Models.Information>
+
+@{
+    ViewBag.Title = "Bulletin Slideshow";
+}
+
 @section scripts {
     <script>
         $(function () {
@@ -6,6 +11,21 @@
                 autoSlide: true,
                 autoSlideInterval: 500,
                 autoHeight: false
+            });
+
+            // Test SignalR
+            var push = $.connection.pushNotification;
+
+            push.client.refreshPage = function () {
+                location.reload();
+            };
+
+            $.connection.hub.start()
+            .done(function () {
+                console.log("Connection Successful.");
+            })
+            .fail(function (ex) {
+                console.log("Connection Failed.");
             });
         })
     </script>

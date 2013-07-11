@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SignalR = Microsoft.AspNet.SignalR;
 using BulletinSlideshow.Models;
 
 namespace BulletinSlideshow.Areas.Administrator.Controllers
@@ -13,6 +14,7 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
     public class CategoryController : Controller
     {
         private BulletinSlideshowContext db = new BulletinSlideshowContext();
+        private SignalR.IHubContext hubContext = SignalR.GlobalHost.ConnectionManager.GetHubContext<PushNotification>();
 
         //
         // GET: /Administrator/Category/
@@ -20,19 +22,6 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
         public ActionResult Index()
         {
             return View(db.Categories.ToList());
-        }
-
-        //
-        // GET: /Administrator/Category/Details/5
-
-        public ActionResult Details(int id = 0)
-        {
-            Category category = db.Categories.Find(id);
-            if (category == null)
-            {
-                return HttpNotFound();
-            }
-            return View(category);
         }
 
         //
@@ -54,6 +43,10 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
             {
                 db.Categories.Add(category);
                 db.SaveChanges();
+
+                // Notification frontend to refresh page
+                hubContext.Clients.All.refreshPage();
+
                 return RedirectToAction("Index");
             }
 
@@ -84,6 +77,10 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
             {
                 db.Entry(category).State = EntityState.Modified;
                 db.SaveChanges();
+
+                // Notification frontend to refresh page
+                hubContext.Clients.All.refreshPage();
+
                 return RedirectToAction("Index");
             }
             return View(category);
@@ -96,6 +93,10 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
             Category category = db.Categories.Find(id);
             db.Categories.Remove(category);
             db.SaveChanges();
+
+            // Notification frontend to refresh page
+            hubContext.Clients.All.refreshPage();
+
             return RedirectToAction("Index");
         }
 

@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SignalR=Microsoft.AspNet.SignalR;
 using BulletinSlideshow.Models;
 
 namespace BulletinSlideshow.Areas.Administrator.Controllers
@@ -13,6 +14,7 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
     public class InformationController : Controller
     {
         private BulletinSlideshowContext db = new BulletinSlideshowContext();
+        private SignalR.IHubContext hubContext = SignalR.GlobalHost.ConnectionManager.GetHubContext<PushNotification>();
 
         //
         // GET: /Administrator/Information/
@@ -21,19 +23,6 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
         {
             var information = db.Information.Include(i => i.Category);
             return View(information.ToList());
-        }
-
-        //
-        // GET: /Administrator/Information/Details/5
-
-        public ActionResult Details(int id = 0)
-        {
-            Information information = db.Information.Find(id);
-            if (information == null)
-            {
-                return HttpNotFound();
-            }
-            return View(information);
         }
 
         //
@@ -56,6 +45,10 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
             {
                 db.Information.Add(information);
                 db.SaveChanges();
+
+                // Notification frontend to refresh page
+                hubContext.Clients.All.refreshPage();
+
                 return RedirectToAction("Index");
             }
 
@@ -90,6 +83,10 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
 
                 db.Entry(information).State = EntityState.Modified;
                 db.SaveChanges();
+
+                // Notification frontend to refresh page
+                hubContext.Clients.All.refreshPage();
+
                 return RedirectToAction("Index");
             }
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", information.CategoryId);
@@ -97,28 +94,19 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
         }
 
         //
-        // GET: /Administrator/Information/Delete/5
-
-        public ActionResult Delete(int id = 0)
-        {
-            Information information = db.Information.Find(id);
-            if (information == null)
-            {
-                return HttpNotFound();
-            }
-            return View(information);
-        }
-
-        //
         // POST: /Administrator/Information/Delete/5
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Delete(int id)
         {
             Information information = db.Information.Find(id);
             db.Information.Remove(information);
             db.SaveChanges();
+
+            // Notification frontend to refresh page
+            hubContext.Clients.All.refreshPage();
+
             return RedirectToAction("Index");
         }
 

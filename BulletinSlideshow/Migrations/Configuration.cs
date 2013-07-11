@@ -4,6 +4,7 @@ namespace BulletinSlideshow.Migrations
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
+    using BulletinSlideshow.Models;
 
     internal sealed class Configuration : DbMigrationsConfiguration<BulletinSlideshow.Models.BulletinSlideshowContext>
     {
@@ -26,6 +27,18 @@ namespace BulletinSlideshow.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+            if (context.Members.Count() == 0)
+            {
+                context.Members.AddOrUpdate(new Member
+                {
+                    Id = 1,
+                    Account = "admin",
+                    Password = "aQE0irDerNnbapnawQnoppxBC8EG+SL+0M0+LzuzYw+vMYYZeeEbtI3KEQB58PINNGy9mlkf+gEYaP6PKcA0/jl1eVlOdmhocXltZXI0ZFRlNTVac3p6Rld0clVoZjd1c2U2bg==",
+                    Name = "Admin",
+                    CreateOn = DateTime.Now,
+                    LastLoginOn = null
+                });
+            }
         }
     }
 }

@@ -18,6 +18,9 @@ namespace BulletinSlideshow
         {
             AreaRegistration.RegisterAllAreas();
 
+            // Register the default hubs route: ~/signalr
+            RouteTable.Routes.MapHubs();
+
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

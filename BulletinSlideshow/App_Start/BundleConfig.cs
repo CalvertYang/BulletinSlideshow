@@ -30,6 +30,9 @@ namespace BulletinSlideshow
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                         "~/Scripts/bootstrap.js",
                         "~/Scripts/bootbox.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/signalr").Include(
+                        "~/Scripts/jquery.signalR-{version}.js"));
             #endregion
 
             #region CSS

@@ -14,8 +14,11 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/signalr")
+    <script src="~/signalr/hubs"></script>
     <script src="~/Scripts/jquery.easing.1.3.js"></script>
     <script src="~/Scripts/jquery.liquid-slider.min.js"></script>
+    <script src="~/Scripts/jquery.touchSwipe.min.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

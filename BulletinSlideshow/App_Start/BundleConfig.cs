@@ -24,9 +24,6 @@ namespace BulletinSlideshow
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
-                        "~/Scripts/angular*"));
-
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                         "~/Scripts/bootstrap.js",
                         "~/Scripts/bootbox.js"));

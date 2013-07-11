@@ -36,6 +36,7 @@
                             <li>
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i>@User.Identity.Name <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
+                                    <li>@Html.RouteLink("返回首頁", "Default", new { controller = "Home", action = "Index" })</li>
                                     <li>@Html.RouteLink("登出", "Administrator", new { controller = "Member", action = "Logout" })</li>
                                 </ul>
                             </li>
@@ -56,7 +57,6 @@
         @RenderBody()
     </div>
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>

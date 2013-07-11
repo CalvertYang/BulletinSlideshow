@@ -27,6 +27,7 @@
         $('.edit-password').click(function () {
             currentId = $(this).data('id');
             $('#editModal').modal('toggle');
+            $('#newPassword').focus();
         })
 
         $('#savePassword').click(function () {

@@ -187,7 +187,7 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
             // 清除所有曾經寫入過的 Session 資料
             Session.Clear();
 
-            return RedirectToAction("Login");
+            return RedirectToRoute("Default", new { controller = "Home", action = "Index" });
         }
 
         #region Methods

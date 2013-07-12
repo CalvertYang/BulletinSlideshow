@@ -4,48 +4,35 @@
     ViewBag.Title = "帳號管理-編輯";
 }
 
-<div class="span12">
-    <div class="row">
-        <h3>帳號管理</h3>
-    </div>
-    <div class="row">
+<div class="row">
+    <div class="span6 offset3">
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true)
 
             <fieldset>
-                <legend>編輯</legend>
+                <legend>編輯帳號</legend>
 
                 @Html.HiddenFor(model => model.Id)
 
-                <div class="editor-label">
-                    @Html.LabelFor(model => model.Account)
-                </div>
-                <div class="editor-field">
-                    @Html.DisplayFor(model => model.Account)
+                <div>
+                    <div class="input-prepend offset1">
+                        @Html.LabelFor(model => model.Account, new { @class = "add-on" })
+                        @Html.TextBoxFor(model => model.Account, new { disabled = "disabled", @readonly = "readonly" })
+                    </div>
+
+                    <div class="input-prepend offset1">
+                        @Html.LabelFor(model => model.Name, new { @class = "add-on" })
+                        @Html.EditorFor(model => model.Name)
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
                 </div>
 
-                @*<div class="editor-label">
-                    @Html.LabelFor(model => model.Password)
-                </div>
-                <div class="editor-field">
-                    @Html.EditorFor(model => model.Password)
-                    @Html.ValidationMessageFor(model => model.Password)
-                </div>*@
-
-                <div class="editor-label">
-                    @Html.LabelFor(model => model.Name)
-                </div>
-                <div class="editor-field">
-                    @Html.EditorFor(model => model.Name)
-                    @Html.ValidationMessageFor(model => model.Name)
-                </div>
-
-                <p>
+                <div class="controls pull-right">
                     <input type="submit" value="確認" class="btn btn-small btn-primary" />
                     @Html.ActionLink("返回", "Index", null, new { @class = "btn btn-small" })
-                </p>
+                </div>
             </fieldset>
         }
     </div>
@@ -53,4 +40,7 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $('#Name').focus();
+    </script>
 }

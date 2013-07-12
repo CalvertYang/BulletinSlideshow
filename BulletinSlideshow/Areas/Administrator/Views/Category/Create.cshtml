@@ -4,31 +4,28 @@
     ViewBag.Title = "分類管理-新增";
 }
 
-<div class="span12">
-    <div class="row">
-        <h3>分類管理</h3>
-    </div>
-    <div class="row">
+<div class="row">
+    <div class="span6 offset3">
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true)
 
             <fieldset>
-                <legend>新增</legend>
+                <legend>新增分類</legend>
 
-                <div class="editor-label">
-                    @Html.LabelFor(model => model.Name)
-                </div>
-                <div class="editor-field">
-                    @Html.EditorFor(model => model.Name)
-                    @Html.ValidationMessageFor(model => model.Name)
+                <div>
+                    <div class="input-prepend offset1">
+                        @Html.LabelFor(model => model.Name, new { @class = "add-on" })
+                        @Html.TextBoxFor(model => model.Name, new { @class = "input-xlarge" })
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
                 </div>
 
-                <p>
+                <div class="controls pull-right">
                     <input type="submit" value="建立" class="btn btn-small btn-primary" />
                     @Html.ActionLink("返回", "Index", null, new { @class = "btn btn-small" })
-                </p>
+                </div>
             </fieldset>
         }
     </div>
@@ -36,4 +33,7 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $('#Name').focus();
+    </script>
 }

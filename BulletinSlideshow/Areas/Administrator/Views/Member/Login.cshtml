@@ -3,6 +3,12 @@
     ViewBag.Title = "登入";
 }
 
+@section scripts{
+    <script>
+        $('#Account').focus();
+    </script>
+}
+
 <div>
     @using (Html.BeginForm())
     {

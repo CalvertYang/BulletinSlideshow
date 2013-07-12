@@ -145,6 +145,18 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                if (String.IsNullOrEmpty(returnUrl))
+                {
+                    return RedirectToRoute("Administrator", new { controller = "Information", action = "Index" });
+                }
+                else
+                {
+                    return Redirect(returnUrl);
+                }
+            }
+
             ViewBag.ReturnUrl = returnUrl;
 
             return View();

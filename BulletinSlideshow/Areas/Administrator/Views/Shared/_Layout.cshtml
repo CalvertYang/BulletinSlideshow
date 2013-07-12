@@ -17,7 +17,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="brand" href="@Url.RouteUrl("Administrator", new { controller = "Information", action = "Index" })"><i class="icon-bookmark"></i>Bulletin Slideshow</a>
+                <a class="brand" href="@Url.RouteUrl("Administrator", new { controller = "Information", action = "Index" })"><i class="icon-bookmark"></i> Bulletin Slideshow</a>
                 <div class="nav-collapse collapse">
                     <ul class="nav">
                         @if (User.Identity.IsAuthenticated)
@@ -33,18 +33,16 @@
                         @{
                             if (User.Identity.IsAuthenticated)
                             {
-                            <li>
+                            @*<li>
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i>@User.Identity.Name <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>@Html.RouteLink("返回首頁", "Default", new { controller = "Home", action = "Index" })</li>
                                     <li>@Html.RouteLink("登出", "Administrator", new { controller = "Member", action = "Logout" })</li>
                                 </ul>
-                            </li>
+                            </li>*@
+                            <li>@Html.RouteLink("返回首頁", "Default", new { controller = "Home", action = "Index" })</li>
+                            <li>@Html.RouteLink("登出[" + User.Identity.Name+ "]", "Administrator", new { controller = "Member", action = "Logout" })</li>
                             }
-                            @*else
-                            {
-                            <li>@Html.RouteLink("登入", "Administrator", new { controller = "Member", action = "Login" })</li>
-                            }*@
                         }
                     </ul>
                 </div>

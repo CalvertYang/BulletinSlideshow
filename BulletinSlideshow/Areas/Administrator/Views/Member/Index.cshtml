@@ -74,7 +74,12 @@
                 <th>@Html.DisplayNameFor(model => model.Name)</th>
                 <th class="span2">@Html.DisplayNameFor(model => model.CreateOn)</th>
                 <th class="span2">@Html.DisplayNameFor(model => model.LastLoginOn)</th>
-                <th class="span2">@Html.RouteLink("新增", "Administrator", new { controller = "Member", action = "Create" }, new { @class = "btn btn-small btn-success" })</th>
+                <th class="span2">
+                    @if (User.Identity.Name == "admin" || User.Identity.Name == "thomas")
+                    {
+                    @Html.RouteLink("新增", "Administrator", new { controller = "Member", action = "Create" }, new { @class = "btn btn-small btn-success" })
+                    }
+                </th>
             </tr>
             @foreach (var item in Model)
             {

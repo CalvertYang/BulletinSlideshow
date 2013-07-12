@@ -40,8 +40,8 @@
                                     <li>@Html.RouteLink("登出", "Administrator", new { controller = "Member", action = "Logout" })</li>
                                 </ul>
                             </li>*@
-                            <li>@Html.RouteLink("返回首頁", "Default", new { controller = "Home", action = "Index" })</li>
-                            <li>@Html.RouteLink("登出[" + User.Identity.Name+ "]", "Administrator", new { controller = "Member", action = "Logout" })</li>
+                            <li><a href="@Url.RouteUrl("Default", new { controller = "Home", action = "Index" })"><i class="icon-home"></i> 返回首頁</a></li>
+                            <li><a href="@Url.RouteUrl("Administrator", new { controller = "Member", action = "Logout" })"><i class="icon-user"></i> 登出 [@User.Identity.Name]</a></li>
                             }
                         }
                     </ul>

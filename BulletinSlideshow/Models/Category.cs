@@ -11,7 +11,9 @@ namespace BulletinSlideshow.Models
         [Key]
         public int Id { get; set; }
 
-        [Required, Display(Name = "分類名稱"), MaxLength(50)]
+        [Required]
+        [Display(Name = "分類名稱")]
+        [MaxLength(50)]
         public string Name { get; set; }
     }
 }

@@ -15,10 +15,10 @@
                 <legend>新增帳號</legend>
 
                 <div>
-                    <div class="input-prepend offset1">
+                    <div class="input-prepend offset1 input-append">
                         @Html.LabelFor(model => model.Account, new { @class = "add-on" })
                         @Html.EditorFor(model => model.Account)
-                        @Html.ValidationMessageFor(model => model.Account)
+                        @Html.ValidationMessageFor(model => model.Account, null, new { @class="add-on"})
                     </div>
 
                     <div class="input-prepend offset1">

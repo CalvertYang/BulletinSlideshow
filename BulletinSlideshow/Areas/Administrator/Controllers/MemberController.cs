@@ -233,6 +233,26 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
             return isVerified;
         }
 
+        /// <summary>
+        /// 檢查帳號是否重複
+        /// </summary>
+        /// <param name="Account">帳號</param>
+        /// <param name="Id">Id</param>
+        /// <returns>驗證結果</returns>
+        public JsonResult CheckAccountDuplicate(string Account, int Id = 0)
+        {
+            var member = db.Members.Where(e => e.Id != Id && e.Account == Account).FirstOrDefault();
+
+            if (member != null)
+            {
+                return Json(false);
+            }
+            else
+            {
+                return Json(true);
+            }
+        }
+
         #endregion
 
         #endregion

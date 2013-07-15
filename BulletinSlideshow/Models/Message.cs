@@ -11,6 +11,7 @@ namespace BulletinSlideshow.Models
         [Key]
         public int Id { get; set; }
 
+        [Required]
         [Display(Name = "即時訊息")]
         public string NotifyMessage { get; set; }
 

@@ -1,0 +1,43 @@
+﻿@model BulletinSlideshow.Models.Project
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Project</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Situation)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Situation)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Plan)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Plan)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Director)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Director)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.LastUpdateOn)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LastUpdateOn)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

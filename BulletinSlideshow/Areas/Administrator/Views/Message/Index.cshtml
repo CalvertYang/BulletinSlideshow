@@ -6,7 +6,7 @@
 
 @section scripts{
     <script>
-        function Delete(id, name) {
+        function Delete(id) {
             bootbox.confirm("您確定要刪除訊息嗎?", function (result) {
                 if (result) {
                     var url = '@Url.RouteUrl("Administrator", new { controller = "Message", action = "Delete" })/' + id;
@@ -41,9 +41,14 @@
                 <th>
                     @Html.DisplayNameFor(model => model.NotifyMessage)
                 </th>
-                <th class="span2">@Html.RouteLink("新增", "Administrator", new { controller = "Message", action = "Create" }, new { @class = "btn btn-small btn-success" })</th>
+                <th class="span2">
+                    @if(Model.Count() < 1)
+                    {
+                    @Html.RouteLink("新增", "Administrator", new { controller = "Message", action = "Create" }, new { @class = "btn btn-small btn-success" })
+                    }
+                </th>
             </tr>
-
+            
             @foreach (var item in Model)
             {
                 <tr>

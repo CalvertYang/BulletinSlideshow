@@ -1,0 +1,60 @@
+﻿@model BulletinSlideshow.Models.Project
+
+@{
+    ViewBag.Title = "專案管理-編輯";
+}
+
+<div class="row">
+    <div class="span6 offset3">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            <fieldset>
+                <legend>編輯專案</legend>
+
+                @Html.HiddenFor(model => model.Id)
+
+                <div>
+                    <div class="input-prepend offset1 input-append">
+                        @Html.LabelFor(model => model.Name, new { @class = "add-on" })
+                        @Html.EditorFor(model => model.Name)
+                        @Html.ValidationMessageFor(model => model.Name, null, new { @class = "add-on" })
+                    </div>
+
+                    <div class="input-prepend offset1 input-append">
+                        @Html.LabelFor(model => model.Situation, new { @class = "add-on" })
+                        @Html.TextAreaFor(model => model.Situation)
+                        @Html.ValidationMessageFor(model => model.Situation, null, new { @class = "add-on" })
+                    </div>
+
+                    <div class="input-prepend offset1 input-append">
+                        @Html.LabelFor(model => model.Plan, new { @class = "add-on" })
+                        @Html.TextAreaFor(model => model.Plan)
+                        @Html.ValidationMessageFor(model => model.Plan, null, new { @class = "add-on" })
+                    </div>
+
+                    <div class="input-prepend offset1 input-append">
+                        @Html.LabelFor(model => model.Director, new { @class = "add-on" })
+                        @Html.EditorFor(model => model.Director)
+                        @Html.ValidationMessageFor(model => model.Director, null, new { @class = "add-on" })
+                    </div>
+                </div>
+
+                <div class="controls pull-right">
+                    <input type="submit" value="確認" class="btn btn-small btn-primary" />
+                    @Html.ActionLink("返回", "Index", null, new { @class = "btn btn-small" })
+                </div>
+            </fieldset>
+        }
+
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $('#Name').focus();
+    </script>
+}

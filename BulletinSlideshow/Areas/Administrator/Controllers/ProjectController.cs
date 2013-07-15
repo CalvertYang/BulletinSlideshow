@@ -10,21 +10,34 @@ using BulletinSlideshow.Models;
 
 namespace BulletinSlideshow.Areas.Administrator.Controllers
 {
-    public class MessageController : Controller
+    public class ProjectController : Controller
     {
         private BulletinSlideshowContext db = new BulletinSlideshowContext();
         private SignalR.IHubContext hubContext = SignalR.GlobalHost.ConnectionManager.GetHubContext<PushNotification>();
 
         //
-        // GET: /Administrator/Message/
+        // GET: /Administrator/Project/
 
         public ActionResult Index()
         {
-            return View(db.Messages.ToList());
+            return View(db.Projects.ToList());
         }
 
         //
-        // GET: /Administrator/Message/Create
+        // GET: /Administrator/Project/Details/5
+
+        public ActionResult Details(int id = 0)
+        {
+            Project project = db.Projects.Find(id);
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
+            return View(project);
+        }
+
+        //
+        // GET: /Administrator/Project/Create
 
         public ActionResult Create()
         {
@@ -32,17 +45,15 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
         }
 
         //
-        // POST: /Administrator/Message/Create
+        // POST: /Administrator/Project/Create
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Message message)
+        public ActionResult Create(Project project)
         {
             if (ModelState.IsValid)
             {
-                message.LastUpdateOn = DateTime.Now;
-
-                db.Messages.Add(message);
+                db.Projects.Add(project);
                 db.SaveChanges();
 
                 // Notification frontend to refresh page
@@ -51,34 +62,34 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(message);
+            return View(project);
         }
 
         //
-        // GET: /Administrator/Message/Edit/5
+        // GET: /Administrator/Project/Edit/5
 
         public ActionResult Edit(int id = 0)
         {
-            Message message = db.Messages.Find(id);
-            if (message == null)
+            Project project = db.Projects.Find(id);
+            if (project == null)
             {
                 return HttpNotFound();
             }
-            return View(message);
+            return View(project);
         }
 
         //
-        // POST: /Administrator/Message/Edit/5
+        // POST: /Administrator/Project/Edit/5
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Message message)
+        public ActionResult Edit(Project project)
         {
             if (ModelState.IsValid)
             {
-                message.LastUpdateOn = DateTime.Now;
+                project.LastUpdateOn = DateTime.Now;
 
-                db.Entry(message).State = EntityState.Modified;
+                db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
 
                 // Notification frontend to refresh page
@@ -86,18 +97,18 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
 
                 return RedirectToAction("Index");
             }
-            return View(message);
+            return View(project);
         }
 
         //
-        // POST: /Administrator/Message/Delete/5
+        // POST: /Administrator/Project/Delete/5
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            Message message = db.Messages.Find(id);
-            db.Messages.Remove(message);
+            Project project = db.Projects.Find(id);
+            db.Projects.Remove(project);
             db.SaveChanges();
 
             // Notification frontend to refresh page

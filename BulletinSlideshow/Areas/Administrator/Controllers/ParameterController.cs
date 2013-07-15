@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SignalR = Microsoft.AspNet.SignalR;
 using BulletinSlideshow.Models;
 
 namespace BulletinSlideshow.Areas.Administrator.Controllers
@@ -12,6 +13,7 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
     public class ParameterController : Controller
     {
         private BulletinSlideshowContext db = new BulletinSlideshowContext();
+        private SignalR.IHubContext hubContext = SignalR.GlobalHost.ConnectionManager.GetHubContext<PushNotification>();
 
         //
         // GET: /Administrator/Parameter/
@@ -45,6 +47,10 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
             {
                 db.Entry(parameter).State = EntityState.Modified;
                 db.SaveChanges();
+
+                // Notification frontend to refresh page
+                hubContext.Clients.All.refreshPage();
+
                 return RedirectToAction("Index");
             }
             return View(parameter);

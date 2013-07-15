@@ -7,10 +7,10 @@
 @section scripts {
     <script>
         $(function () {
-            $('#slideTab').liquidSlider({
+            var slideInterval = @ViewBag.Parameter.SlideInterval
+            $('#slideTab, #slideProject').liquidSlider({
                 autoSlide: true,
-                //autoSlideInterval: @ViewBag.Parameter.SlideInterval,
-                autoSlideInterval: 500,
+                autoSlideInterval: slideInterval,
                 autoHeight: false
             });
 
@@ -44,7 +44,7 @@
     @{ int id = 0; }
     @foreach (var category in ViewBag.Category)
     {
-        
+
         if (id == category.Id)
         {
             continue;
@@ -58,7 +58,7 @@
             <ul>
             @foreach (var info in Model)
             {
-                
+
                 if (info.CategoryId == id)
                 {
                     <li style="font-size:xx-large">@info.Content</li>
@@ -77,3 +77,27 @@
         @ViewBag.NotifyMessage
     </div>
 }
+
+<div class="liquid-slider" id="slideProject">
+    @foreach (var project in ViewBag.Project)
+    {
+        <div>
+            <h2 class="title">@project.Name</h2>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="alert alert-block span6">
+                        <h2>現狀</h2>
+                        <span style="font-size: xx-large; line-height: normal; white-space: pre-line">@project.Situation</span>
+                    </div>
+                    <div class="alert alert-success span6">
+                        <h2>方案</h2>
+                        <span style="font-size: xx-large; line-height: normal; white-space: pre-line">@project.Situation</span>
+                    </div>
+                </div>
+            </div>
+            <div class="well" style="font-size: xx-large;">
+                負責人：@project.Director
+            </div>
+        </div>
+    }
+</div>

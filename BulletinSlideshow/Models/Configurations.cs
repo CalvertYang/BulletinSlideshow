@@ -55,4 +55,14 @@ namespace BulletinSlideshow.Models
         }
     }
     #endregion
+
+    #region Project
+    public class ProjectConfigurations : EntityTypeConfiguration<Project>
+    {
+        public ProjectConfigurations()
+        {
+            // Fluent API 設定建置在此
+        }
+    }
+    #endregion
 }

@@ -25,6 +25,7 @@
                             <li>@Html.RouteLink("佈告管理", "Administrator", new { controller = "Information", action = "Index" })</li>
                             <li>@Html.RouteLink("分類管理", "Administrator", new { controller = "Category", action = "Index" })</li>
                             <li>@Html.RouteLink("訊息管理", "Administrator", new { controller = "Message", action = "Index" })</li>
+                            <li>@Html.RouteLink("專案管理", "Administrator", new { controller = "Project", action = "Index" })</li>
                             <li>@Html.RouteLink("帳號管理", "Administrator", new { controller = "Member", action = "Index" })</li>
                             if(User.Identity.Name == "admin" || User.Identity.Name == "thomas")
                             {

@@ -1,7 +1,7 @@
-﻿@model IEnumerable<BulletinSlideshow.Models.Information>
+﻿@model IEnumerable<BulletinSlideshow.Models.Project>
 
 @{
-    ViewBag.Title = "佈告管理";
+    ViewBag.Title = "專案管理";
 }
 
 @section scripts{
@@ -9,7 +9,7 @@
         function Delete(id, name) {
             bootbox.confirm("您確定要刪除 <b>" + name + " </b>嗎?", function (result) {
                 if (result) {
-                    var url = '@Url.RouteUrl("Administrator", new { controller = "Information", action = "Delete" })/' + id;
+                    var url = '@Url.RouteUrl("Administrator", new { controller = "Project", action = "Delete" })/' + id;
                     var form = $('#__AjaxAntiForgeryForm');
                     var token = $('input[name="__RequestVerificationToken"]', form).val();
                     $.ajax({
@@ -33,30 +33,36 @@
 
 <div class="span12">
     <div class="row">
-        <h3>佈告管理</h3>
+        <h3>專案管理</h3>
     </div>
     <div class="row">
         <table class="table table-bordered table-striped">
             <tr>
-                <th>@Html.DisplayNameFor(model => model.Content)</th>
-                <th class="span2">@Html.DisplayNameFor(model => model.Category.Name)</th>
+                <th class="span2">@Html.DisplayNameFor(model => model.Name)</th>
+                <th>@Html.DisplayNameFor(model => model.Situation)</th>
+                <th>@Html.DisplayNameFor(model => model.Plan)</th>
+                <th class="span2">@Html.DisplayNameFor(model => model.Director)</th>
                 <th class="span2">@Html.DisplayNameFor(model => model.CreateOn)</th>
                 <th class="span2">@Html.DisplayNameFor(model => model.LastUpdateOn)</th>
-                <th class="span2">@Html.RouteLink("新增", "Administrator", new { controller = "Information", action = "Create" }, new { @class = "btn btn-small btn-success" })</th>
+                <th class="span2">@Html.RouteLink("新增", "Administrator", new { controller = "Project", action = "Create" }, new { @class = "btn btn-small btn-success" })</th>
             </tr>
+
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Content)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Category.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td style="white-space: pre-line">@Html.DisplayFor(modelItem => item.Situation)</td>
+                    <td style="white-space: pre-line">@Html.DisplayFor(modelItem => item.Plan)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Director)</td>
                     <td>@Html.DisplayFor(modelItem => item.CreateOn)</td>
                     <td>@Html.DisplayFor(modelItem => item.LastUpdateOn)</td>
                     <td>
-                        @Html.RouteLink("編輯", "Administrator", new { controller = "Information", action = "Edit", id = item.Id }, new { @class = "btn btn-small btn-primary" })
-                        <button class='delete-button btn btn-small btn-danger' onclick='Delete(@item.Id, "@item.Content");'>刪除</button>
+                        @Html.RouteLink("編輯", "Administrator", new { controller = "Project", action = "Edit", id = item.Id }, new { @class = "btn btn-small btn-primary" })
+                        <button class='delete-button btn btn-small btn-danger' onclick='Delete(@item.Id, "@item.Name");'>刪除</button>
                     </td>
                 </tr>
             }
+
         </table>
     </div>
 </div>

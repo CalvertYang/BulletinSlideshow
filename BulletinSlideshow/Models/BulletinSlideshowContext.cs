@@ -35,5 +35,7 @@ namespace BulletinSlideshow.Models
             modelBuilder.Configurations.Add(new MessageConfigurations());
             modelBuilder.Configurations.Add(new ParameterConfigurations());
         }
+
+        public DbSet<Project> Projects { get; set; }
     }
 }

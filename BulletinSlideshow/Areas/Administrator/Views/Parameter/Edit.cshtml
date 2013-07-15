@@ -1,0 +1,36 @@
+﻿@model BulletinSlideshow.Models.Parameter
+
+@{
+    ViewBag.Title = "參數管理-編輯";
+}
+
+<div class="row">
+    <div class="span4 offset4">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            <fieldset>
+                <legend>編輯參數</legend>
+
+                @Html.HiddenFor(model => model.Id)
+
+                <div class="input-prepend">
+                    @Html.LabelFor(model => model.SlideInterval, new { @class = "add-on" })
+                    @Html.EditorFor(model => model.SlideInterval)
+                    @Html.ValidationMessageFor(model => model.SlideInterval)
+                </div>
+
+                <div class="controls pull-right">
+                    <input type="submit" value="確認" class="btn btn-small btn-primary" />
+                    @Html.ActionLink("返回", "Index", null, new { @class = "btn btn-small" })
+                </div>
+            </fieldset>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

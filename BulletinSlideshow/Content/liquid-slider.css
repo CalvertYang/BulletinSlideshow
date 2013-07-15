@@ -67,7 +67,7 @@
 *******************************************************/
 .liquid-slider-wrapper .liquid-slider {
   background: #f2f2f2;
-  width: 1030px;
+  width: 1170px;
   /* Do not edit below this line */
   float: left;
   overflow: hidden;
@@ -93,7 +93,7 @@
 * for the entire slider.
 *******************************************************/
 .liquid-slider-wrapper .liquid-slider .panel {  
-  width: 1030px;
+  width: 1170px;
   /* Do not edit below this line */
   display: block;
   float: left;
@@ -174,7 +174,7 @@
   display: inline;
 }
 .liquid-slider-wrapper .liquid-nav ul li a {
- 
+  font-size: 20px;
   /* Do not edit below this line */
   display: block;
   float: left;
@@ -387,7 +387,7 @@
 * in general anyone not viewing on a mobile device. Here's where
 * you can add resource intensive styles.
 ******************************************************************/
-@media only screen and (min-width: 1030px) {
+@media only screen and (min-width: 1170px) {
   
 
 }

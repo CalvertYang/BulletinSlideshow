@@ -60,3 +60,7 @@ textarea {
 .validation-summary-valid {
     display: none;
 }
+
+.notifyMessage {
+    overflow: hidden;
+}

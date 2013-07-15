@@ -39,6 +39,15 @@ namespace BulletinSlideshow.Migrations
                     LastLoginOn = null
                 });
             }
+
+            if (context.Parameters.Count() == 0)
+            {
+                context.Parameters.AddOrUpdate(new Parameter
+                {
+                    Id = 1,
+                    SlideInterval = 500
+                });
+            }
         }
     }
 }

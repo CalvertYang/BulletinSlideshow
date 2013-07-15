@@ -1,0 +1,37 @@
+﻿@model BulletinSlideshow.Models.Message
+
+@{
+    ViewBag.Title = "訊息管理-新增";
+}
+
+<div class="row">
+    <div class="span6 offset3">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            <fieldset>
+                <legend>新增訊息</legend>
+
+                <div>
+                    <div class="input-prepend">
+                        @Html.LabelFor(model => model.NotifyMessage, new { @class = "add-on" })
+                        @Html.TextBoxFor(model => model.NotifyMessage, new { @class = "input-xxlarge" })
+                        @Html.ValidationMessageFor(model => model.NotifyMessage)
+                    </div>
+                </div>
+
+                <div class="controls pull-right">
+                    <input type="submit" value="建立" class="btn btn-small btn-primary" />
+                    @Html.ActionLink("返回", "Index", null, new { @class = "btn btn-small" })
+                </div>
+            </fieldset>
+        }
+
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

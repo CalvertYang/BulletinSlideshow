@@ -20,6 +20,12 @@ namespace BulletinSlideshow.Controllers
         {
             var information = db.Information.Include(i => i.Category).OrderBy(i => i.CategoryId);
             ViewBag.Category = db.Categories.ToList();
+            ViewBag.Parameter = db.Parameters.FirstOrDefault();
+            var message = db.Messages.FirstOrDefault();
+            if (message != null)
+            {
+                ViewBag.NotifyMessage = message.NotifyMessage;
+            }
             return View(information.ToList());
         }
 

@@ -1,0 +1,32 @@
+﻿@model IEnumerable<BulletinSlideshow.Models.Parameter>
+
+@{
+    ViewBag.Title = "參數管理";
+}
+
+<div class="span12">
+    <div class="row">
+        <h3>分類管理</h3>
+    </div>
+    <div class="row">
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.SlideInterval)</th>
+                <th class="span2"></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SlideInterval)
+                    </td>
+                    <td>
+                        @Html.RouteLink("編輯", "Administrator", new { controller = "Parameter", action = "Edit", id = item.Id }, new { @class = "btn btn-small btn-primary" })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>

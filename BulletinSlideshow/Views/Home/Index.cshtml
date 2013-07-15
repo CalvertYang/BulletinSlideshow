@@ -9,8 +9,17 @@
         $(function () {
             $('#slideTab').liquidSlider({
                 autoSlide: true,
+                //autoSlideInterval: @ViewBag.Parameter.SlideInterval,
                 autoSlideInterval: 500,
                 autoHeight: false
+            });
+
+            $('.notifyMessage').marquee({
+                speed: 7000,
+                gap: 50,
+                delayBeforeStart: 0,
+                direction: 'left',
+                duplicated: false
             });
 
             // Test SignalR
@@ -52,10 +61,19 @@
                 
                 if (info.CategoryId == id)
                 {
-                    <li>@info.Content</li>
+                    <li style="font-size:xx-large">@info.Content</li>
                 }
             }
             </ul>
         </div>
     }
 </div>
+
+@if (ViewBag.NotifyMessage != null)
+{
+    <br />
+    <br />
+    <div class="notifyMessage well" style="font-size:xx-large; font-weight:bold">
+        @ViewBag.NotifyMessage
+    </div>
+}

@@ -35,4 +35,24 @@ namespace BulletinSlideshow.Models
         }
     }
     #endregion
+
+    #region Parameter
+    public class ParameterConfigurations : EntityTypeConfiguration<Parameter>
+    {
+        public ParameterConfigurations()
+        {
+            // Fluent API 設定建置在此
+        }
+    }
+    #endregion
+
+    #region Message
+    public class MessageConfigurations : EntityTypeConfiguration<Message>
+    {
+        public MessageConfigurations()
+        {
+            // Fluent API 設定建置在此
+        }
+    }
+    #endregion
 }

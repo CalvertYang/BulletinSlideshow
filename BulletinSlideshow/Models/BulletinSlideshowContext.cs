@@ -22,5 +22,18 @@ namespace BulletinSlideshow.Models
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Member> Members { get; set; }
+
+        public DbSet<Message> Messages { get; set; }
+
+        public DbSet<Parameter> Parameters { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Configurations.Add(new InformationConfigurations());
+            modelBuilder.Configurations.Add(new CategoryConfigurations());
+            modelBuilder.Configurations.Add(new MemberConfigurations());
+            modelBuilder.Configurations.Add(new MessageConfigurations());
+            modelBuilder.Configurations.Add(new ParameterConfigurations());
+        }
     }
 }

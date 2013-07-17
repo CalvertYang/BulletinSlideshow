@@ -8,11 +8,6 @@
     <script>
         $(function () {
             var slideInterval = @ViewBag.Parameter.SlideInterval
-            $('#slideTab, #slideProject').liquidSlider({
-                autoSlide: true,
-                autoSlideInterval: slideInterval,
-                autoHeight: false
-            });
 
             $('.notifyMessage').marquee({
                 speed: 7000,
@@ -22,11 +17,129 @@
                 duplicated: false
             });
 
-            // Test SignalR
+            // Information Tab
+            var infoTabCarousel = setInterval(function () {
+                var tabs = $('#information .nav-tabs > li'),
+                    active = tabs.filter('.active'),
+                    next = active.next('li'),
+                    toClick = next.length ? next.find('a') : tabs.eq(0).find('a');
+
+                toClick.tab('show');
+            }, slideInterval);
+
+            $('#information').mouseover(function () {
+                clearInterval(infoTabCarousel);
+            }).mouseout(function () {
+                infoTabCarousel = setInterval(function () {
+                    var tabs = $('#information .nav-tabs > li'),
+                        active = tabs.filter('.active'),
+                        next = active.next('li'),
+                        toClick = next.length ? next.find('a') : tabs.eq(0).find('a');
+
+                    toClick.tab('show');
+                }, slideInterval);
+            });
+
+            // Project Tab
+            var projectTabCarousel = setInterval(function () {
+                var tabs = $('#project .nav-tabs > li'),
+                    active = tabs.filter('.active'),
+                    next = active.next('li'),
+                    toClick = next.length ? next.find('a') : tabs.eq(0).find('a');
+
+                toClick.tab('show');
+            }, slideInterval);
+
+            $('#project').mouseover(function () {
+                clearInterval(projectTabCarousel);
+            }).mouseout(function () {
+                projectTabCarousel = setInterval(function () {
+                    var tabs = $('#project .nav-tabs > li'),
+                        active = tabs.filter('.active'),
+                        next = active.next('li'),
+                        toClick = next.length ? next.find('a') : tabs.eq(0).find('a');
+
+                    toClick.tab('show');
+                }, slideInterval);
+            });
+
+            // SignalR
             var push = $.connection.pushNotification;
 
             push.client.refreshPage = function () {
                 location.reload();
+            };
+
+            // Information Block
+            push.client.addInformationTab = function (category) {
+                $('#information .nav-tabs').append(
+                    '<li id="infoNavTab'+ category.Id + '"><a href="#infoTab' +
+                    category.Id + '" data-toggle="tab">' + category.Name +
+                    '</a></li>'
+                );
+                $('#information .tab-content').append(
+                    '<div class="tab-pane" id="tab' + category.Id + '" style="height:200px;"></div>'
+                );
+            };
+
+            push.client.editInformationTab = function (category) {
+                $('#infoNavTab' + category.Id + ' > a').text(category.Name);
+            };
+            
+            push.client.addInformationContent = function (information) {
+                $('#infoTab' + information.CategoryId + ' > ul').append(
+                    '<li id="infoContent' + information.Id + '" style="font-size: xx-large; line-height: normal;">' + information.Content + '</li>'
+                );
+            };
+
+            push.client.editInformationContent = function (information) {
+                $('#infoContent' + information.Id).remove();
+                $('#infoTab' + information.CategoryId + ' > ul').append(
+                    '<li id="infoContent' + information.Id + '" style="font-size: xx-large; line-height: normal;">' + information.Content + '</li>'
+                );
+            };
+
+            // Project Block
+            push.client.addProject = function (project) {
+                // Add Tab
+                $('#project .nav-tabs').append(
+                    '<li id="projectNavTab' + project.Id + '"><a href="#projectTab' +
+                    project.Id + '" data-toggle="tab">' + project.Name +
+                    '</a></li>'
+                );
+                $('#project .tab-content').append(
+                    '<div class="tab-pane" id="projectTab' + project.Id + '" style="height: 550px;"></div>'
+                );
+
+                // Add Content
+                $('#projectTab' + project.Id).append(
+                    '<div class="alert alert-block">' + '<h2>現狀</h2>' +
+                    '<span style="font-size: xx-large; line-height: normal; white-space: pre-line">' + project.Situation + '</span>' +
+                    '</div>' + 
+                    '<div class="alert alert-success">' + '<h2>方案</h2>' +
+                    '<span style="font-size: xx-large; line-height: normal; white-space: pre-line">' + project.Plan + '</span>' +
+                    '</div>' +
+                    '<div class="well" style="font-size: xx-large;">負責人：' + project.Director + '</div>'
+                );
+            };
+
+            push.client.editProject = function (project) {
+                console.log(project);
+                $('#projectNavTab' + project.Id + ' > a').text(project.Name);
+                $('#projectSituation' + project.Id).text(project.Situation);
+                $('#projectPlan' + project.Id).text(project.Plan);
+                $('#projectDirector' + project.Id).text(project.Director);
+            };
+
+            // unuse
+            push.client.addprojectContent = function (project) {
+                $('#infoTab' + information.CategoryId + ' > ul').append(
+                    '<li id="infoContent' + information.Id + '" style="font-size: xx-large; line-height: normal;">' + information.Content + '</li>'
+                );
+            };
+
+            push.client.editprojectContent = function (project) {
+                $('#infoContent' + information.Id).text(information.Content);
             };
 
             $.connection.hub.start()
@@ -36,68 +149,90 @@
             .fail(function (ex) {
                 console.log("Connection Failed.");
             });
-        })
+        });
     </script>
 }
 
-<div class="liquid-slider" id="slideTab">
-    @{ int id = 0; }
-    @foreach (var category in ViewBag.Category)
-    {
-
-        if (id == category.Id)
-        {
-            continue;
-        }
-        else
-        {
-            id = category.Id;
-        }
-        <div>
-            <h2 class="title">@category.Name</h2>
-            <ul>
-            @foreach (var info in Model)
-            {
-
-                if (info.CategoryId == id)
+@{ bool isFirstElement = false; }
+@if (ViewBag.Category.Count > 0)
+{
+<div class="container-fluid" style="height:250px;">
+    <div class="row-fluid">
+        <div id="information" class="tabbable">
+            <ul class="nav nav-tabs">
+                @{ isFirstElement = true; }
+                @foreach (var category in ViewBag.Category)
                 {
-                    <li style="font-size:xx-large">@info.Content</li>
+                    <li id="infoNavTab@(category.Id)"@{if (isFirstElement) {<text>class=" active"</text>}}><a href="#infoTab@(category.Id)" data-toggle="tab">@category.Name</a></li>
+                    isFirstElement = false;
                 }
-            }
             </ul>
+            <div class="tab-content">
+                @{ isFirstElement = true; }
+                @foreach (var category in ViewBag.Category)
+                {
+                    <div class="tab-pane@{if (isFirstElement) {<text> active</text>}}" id="infoTab@(category.Id)" style="height:200px;">
+                        <ul style="margin-left:30px;">
+                            @foreach (var info in Model)
+                            {
+
+                                if (info.CategoryId == category.Id)
+                                {
+                                <li id="infoContent@(info.Id)" style="font-size: xx-large; line-height: normal;">@info.Content</li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                    isFirstElement = false;
+                }
+            </div>
         </div>
-    }
+    </div>
 </div>
+}
 
 @if (ViewBag.NotifyMessage != null)
 {
-    <br />
     <br />
     <div class="notifyMessage well" style="font-size:xx-large; font-weight:bold">
         @ViewBag.NotifyMessage
     </div>
 }
 
-<div class="liquid-slider" id="slideProject">
-    @foreach (var project in ViewBag.Project)
-    {
-        <div>
-            <h2 class="title">@project.Name</h2>
-            <div class="container-fluid">
-                <div class="row-fluid">
-                    <div class="alert alert-block span6">
-                        <h2>現狀</h2>
-                        <span style="font-size: xx-large; line-height: normal; white-space: pre-line">@project.Situation</span>
+@if (ViewBag.Project.Count > 0)
+{
+<div class="container-fluid" style="height: 600px;">
+    <div class="row-fluid">
+        <div id="project" class="tabbable">
+            <ul class="nav nav-tabs">
+                @{ isFirstElement = true; }
+                @foreach (var project in ViewBag.Project)
+                {
+                    <li id="projectNavTab@(project.Id)"@{if (isFirstElement) {<text>class="active"</text>}}><a href="#projectTab@(project.Id)" data-toggle="tab">@project.Name</a></li>
+                    isFirstElement = false;
+                }
+            </ul>
+            <div class="tab-content">
+                @{ isFirstElement = true; }
+                @foreach (var project in ViewBag.Project)
+                {
+                    <div class="tab-pane@{if (isFirstElement) {<text> active</text>}}" id="projectTab@(project.Id)" style="height:550px;">
+                        <div class="alert alert-block">
+                            <h2>現狀</h2>
+                            <span id="projectSituation@(project.Id)" style="font-size: xx-large; line-height: normal; white-space: pre-line">@project.Situation</span>
+                        </div>
+                        <div class="alert alert-success">
+                            <h2>方案</h2>
+                            <span id="projectPlan@(project.Id)" style="font-size: xx-large; line-height: normal; white-space: pre-line">@project.Plan</span>
+                        </div>
+                        <div class="well" style="font-size: xx-large;">
+                            負責人：<span id="projectDirector@(project.Id)">@project.Director</span>
+                        </div>
                     </div>
-                    <div class="alert alert-success span6">
-                        <h2>方案</h2>
-                        <span style="font-size: xx-large; line-height: normal; white-space: pre-line">@project.Situation</span>
-                    </div>
-                </div>
-            </div>
-            <div class="well" style="font-size: xx-large;">
-                負責人：@project.Director
+                    isFirstElement = false;
+                }
             </div>
         </div>
-    }
+    </div>
 </div>
+}

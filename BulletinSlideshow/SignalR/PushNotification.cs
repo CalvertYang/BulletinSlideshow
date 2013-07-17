@@ -12,6 +12,12 @@ namespace BulletinSlideshow
         {
             // Call the refreshPage method to update clients.
             Clients.All.refreshPage();
+
+            // Call the addInformationTab method to add information category
+            Clients.All.addInformationTab();
+
+            // Call the addInformationTab method to add information content
+            Clients.All.addInformationContent();
         }
     }
 }

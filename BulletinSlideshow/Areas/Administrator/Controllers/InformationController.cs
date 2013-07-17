@@ -46,8 +46,8 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
                 db.Information.Add(information);
                 db.SaveChanges();
 
-                // Notification frontend to refresh page
-                hubContext.Clients.All.refreshPage();
+                // Notification frontend to add information
+                hubContext.Clients.All.addInformationContent(information);
 
                 return RedirectToAction("Index");
             }
@@ -84,8 +84,8 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
                 db.Entry(information).State = EntityState.Modified;
                 db.SaveChanges();
 
-                // Notification frontend to refresh page
-                hubContext.Clients.All.refreshPage();
+                // Notification frontend to edit information
+                hubContext.Clients.All.editInformationContent(information);
 
                 return RedirectToAction("Index");
             }

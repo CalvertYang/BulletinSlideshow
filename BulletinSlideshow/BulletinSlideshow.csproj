@@ -310,12 +310,9 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
-    <Content Include="Scripts\jquery.easing.1.3.js" />
-    <Content Include="Scripts\jquery.liquid-slider.min.js" />
     <Content Include="Scripts\jquery.marquee.min.js" />
     <Content Include="Scripts\jquery.signalR-1.1.2.js" />
     <Content Include="Scripts\jquery.signalR-1.1.2.min.js" />
-    <Content Include="Scripts\jquery.touchSwipe.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />

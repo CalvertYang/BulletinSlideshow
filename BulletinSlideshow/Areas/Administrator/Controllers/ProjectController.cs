@@ -56,8 +56,8 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
                 db.Projects.Add(project);
                 db.SaveChanges();
 
-                // Notification frontend to refresh page
-                hubContext.Clients.All.refreshPage();
+                // Notification frontend to add project
+                hubContext.Clients.All.addProject(project);
 
                 return RedirectToAction("Index");
             }
@@ -92,8 +92,8 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
 
-                // Notification frontend to refresh page
-                hubContext.Clients.All.refreshPage();
+                // Notification frontend to edit project
+                hubContext.Clients.All.editProject(project);
 
                 return RedirectToAction("Index");
             }

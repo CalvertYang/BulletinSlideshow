@@ -45,7 +45,7 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
                 db.SaveChanges();
 
                 // Notification frontend to add category
-                hubContext.Clients.All.addInformationTab(category);
+                hubContext.Clients.All.addInformationCategory(category);
 
                 return RedirectToAction("Index");
             }
@@ -79,7 +79,7 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
                 db.SaveChanges();
 
                 // Notification frontend to edit category
-                hubContext.Clients.All.editInformationTab(category);
+                hubContext.Clients.All.editInformationCategory(category);
 
                 return RedirectToAction("Index");
             }
@@ -94,8 +94,8 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
             db.Categories.Remove(category);
             db.SaveChanges();
 
-            // Notification frontend to refresh page
-            hubContext.Clients.All.refreshPage();
+            // Notification frontend to delete category
+            hubContext.Clients.All.deleteInformationCategory(id);
 
             return RedirectToAction("Index");
         }

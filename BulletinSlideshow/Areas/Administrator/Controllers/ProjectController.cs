@@ -111,8 +111,8 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
             db.Projects.Remove(project);
             db.SaveChanges();
 
-            // Notification frontend to refresh page
-            hubContext.Clients.All.refreshPage();
+            // Notification frontend to delete project
+            hubContext.Clients.All.deleteProject(id);
 
             return RedirectToAction("Index");
         }

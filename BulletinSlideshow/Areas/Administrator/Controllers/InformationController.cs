@@ -104,8 +104,8 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
             db.Information.Remove(information);
             db.SaveChanges();
 
-            // Notification frontend to refresh page
-            hubContext.Clients.All.refreshPage();
+            // Notification frontend to delete information
+            hubContext.Clients.All.deleteInformationContent(id);
 
             return RedirectToAction("Index");
         }

@@ -71,36 +71,63 @@
             };
 
             // Information Block
-            push.client.addInformationTab = function (category) {
+            push.client.addInformationCategory = function (category) {
+                $('#information').parent().parent().css("display", "");
+
                 $('#information .nav-tabs').append(
                     '<li id="infoNavTab'+ category.Id + '"><a href="#infoTab' +
                     category.Id + '" data-toggle="tab">' + category.Name +
                     '</a></li>'
                 );
                 $('#information .tab-content').append(
-                    '<div class="tab-pane" id="tab' + category.Id + '" style="height:200px;"></div>'
+                    '<div class="tab-pane" id="infoTab' + category.Id + '" style="height:200px;">' +
+                    '<h1 id="infoTitle' + category.Id + '">' +
+                    category.Name + '</h1><ul style="margin-left:30px;"></ul></div>'
                 );
             };
 
-            push.client.editInformationTab = function (category) {
+            push.client.editInformationCategory = function (category) {
                 $('#infoNavTab' + category.Id + ' > a').text(category.Name);
+                $('#infoTitle' + category.Id).text(category.Name);
+            };
+
+            push.client.deleteInformationCategory = function (categoryId) {
+                $('#infoNavTab' + categoryId).remove();
+                $('#infoTab' + categoryId).remove();
+
+                // Hide project tab
+                if ($('#information .nav-tabs').children().length == 0) {
+                    $('#information').parent().parent().css("display", "none");
+                }
             };
             
             push.client.addInformationContent = function (information) {
                 $('#infoTab' + information.CategoryId + ' > ul').append(
-                    '<li id="infoContent' + information.Id + '" style="font-size: xx-large; line-height: normal;">' + information.Content + '</li>'
+                    '<li id="infoContent' + information.Id + '">' + information.Content + '</li>'
                 );
             };
 
             push.client.editInformationContent = function (information) {
-                $('#infoContent' + information.Id).remove();
-                $('#infoTab' + information.CategoryId + ' > ul').append(
-                    '<li id="infoContent' + information.Id + '" style="font-size: xx-large; line-height: normal;">' + information.Content + '</li>'
-                );
+                var parentId = $('#infoContent' + information.Id).parent().parent().attr('id').replace('infoTab', '');
+
+                if (parentId == information.CategoryId) {
+                    $('#infoContent' + information.Id).text(information.Content);
+                } else {
+                    $('#infoContent' + information.Id).remove();
+                    $('#infoTab' + information.CategoryId + ' > ul').append(
+                        '<li id="infoContent' + information.Id + '">' + information.Content + '</li>'
+                    );
+                }
+            };
+
+            push.client.deleteInformationContent = function (informationId) {
+                $('#infoContent' + informationId).remove();
             };
 
             // Project Block
             push.client.addProject = function (project) {
+                $('#project').parent().parent().css("display", "");
+
                 // Add Tab
                 $('#project .nav-tabs').append(
                     '<li id="projectNavTab' + project.Id + '"><a href="#projectTab' +
@@ -108,40 +135,36 @@
                     '</a></li>'
                 );
                 $('#project .tab-content').append(
-                    '<div class="tab-pane" id="projectTab' + project.Id + '" style="height: 550px;"></div>'
-                );
-
-                // Add Content
-                $('#projectTab' + project.Id).append(
-                    '<div class="alert alert-block">' + '<h2>現狀</h2>' +
-                    '<span style="font-size: xx-large; line-height: normal; white-space: pre-line">' + project.Situation + '</span>' +
-                    '</div>' + 
-                    '<div class="alert alert-success">' + '<h2>方案</h2>' +
-                    '<span style="font-size: xx-large; line-height: normal; white-space: pre-line">' + project.Plan + '</span>' +
-                    '</div>' +
-                    '<div class="well" style="font-size: xx-large;">負責人：' + project.Director + '</div>'
+                    '<div class="tab-pane" id="projectTab' + project.Id + '" style="height: 550px;">' +
+                    '<h1 id="projectTitle' + project.Id + '">' + project.Name + '</h1>' +
+                    '<div class="alert alert-block"><h2>現狀</h2>' +
+                    '<span id="projectSituation' + project.Id + '" style="white-space: pre-line">' + project.Situation + '</span>' +
+                    '</div><div class="alert alert-success"><h2>方案</h2>' +
+                    '<span id="projectPlan' + project.Id + '" style="white-space: pre-line">' + project.Plan + '</span>' +
+                    '</div><div class="well"><b>負責人：</b><span id="projectDirector' + project.Id + '">' + project.Director + '</span></div></div>'
                 );
             };
 
             push.client.editProject = function (project) {
-                console.log(project);
                 $('#projectNavTab' + project.Id + ' > a').text(project.Name);
+                $('#projectTitle' + project.Id).text(project.Name);
                 $('#projectSituation' + project.Id).text(project.Situation);
                 $('#projectPlan' + project.Id).text(project.Plan);
                 $('#projectDirector' + project.Id).text(project.Director);
             };
 
-            // unuse
-            push.client.addprojectContent = function (project) {
-                $('#infoTab' + information.CategoryId + ' > ul').append(
-                    '<li id="infoContent' + information.Id + '" style="font-size: xx-large; line-height: normal;">' + information.Content + '</li>'
-                );
+            push.client.deleteProject = function (projectId) {
+                $('#projectNavTab' + projectId).remove();
+                $('#projectTab' + projectId).remove();
+                
+                // Hide project tab
+                if ($('#project .nav-tabs').children().length == 0) {
+                    $('#project').parent().parent().css("display", "none");
+                }
             };
+            
 
-            push.client.editprojectContent = function (project) {
-                $('#infoContent' + information.Id).text(information.Content);
-            };
-
+            // Connect to hub
             $.connection.hub.start()
             .done(function () {
                 console.log("Connection Successful.");
@@ -153,10 +176,18 @@
     </script>
 }
 
+<style>
+    .nav-tabs li {
+        font-size: xx-small;
+    }
+    .tab-content, .tab-content li {
+        font-size: xx-large;
+        line-height: normal;
+    }
+</style>
+
 @{ bool isFirstElement = false; }
-@if (ViewBag.Category.Count > 0)
-{
-<div class="container-fluid" style="height:250px;">
+<div class="container-fluid" style="height:250px;@{if (ViewBag.Category.Count == 0) {<text> display: none;</text>}}">
     <div class="row-fluid">
         <div id="information" class="tabbable">
             <ul class="nav nav-tabs">
@@ -172,13 +203,14 @@
                 @foreach (var category in ViewBag.Category)
                 {
                     <div class="tab-pane@{if (isFirstElement) {<text> active</text>}}" id="infoTab@(category.Id)" style="height:200px;">
+                        <h1 id="infoTitle@(category.Id)">@category.Name</h1>
                         <ul style="margin-left:30px;">
                             @foreach (var info in Model)
                             {
 
                                 if (info.CategoryId == category.Id)
                                 {
-                                <li id="infoContent@(info.Id)" style="font-size: xx-large; line-height: normal;">@info.Content</li>
+                                <li id="infoContent@(info.Id)">@info.Content</li>
                                 }
                             }
                         </ul>
@@ -189,19 +221,16 @@
         </div>
     </div>
 </div>
-}
 
 @if (ViewBag.NotifyMessage != null)
 {
     <br />
-    <div class="notifyMessage well" style="font-size:xx-large; font-weight:bold">
+    <div class="notifyMessage well" style="font-size: xx-large; font-weight: bold">
         @ViewBag.NotifyMessage
     </div>
 }
 
-@if (ViewBag.Project.Count > 0)
-{
-<div class="container-fluid" style="height: 600px;">
+<div class="container-fluid" style="height: 600px;@{if (ViewBag.Project.Count == 0) {<text> display: none;</text>}}">
     <div class="row-fluid">
         <div id="project" class="tabbable">
             <ul class="nav nav-tabs">
@@ -217,16 +246,17 @@
                 @foreach (var project in ViewBag.Project)
                 {
                     <div class="tab-pane@{if (isFirstElement) {<text> active</text>}}" id="projectTab@(project.Id)" style="height:550px;">
+                        <h1 id="projectTitle@(project.Id)">@project.Name</h1>
                         <div class="alert alert-block">
                             <h2>現狀</h2>
-                            <span id="projectSituation@(project.Id)" style="font-size: xx-large; line-height: normal; white-space: pre-line">@project.Situation</span>
+                            <span id="projectSituation@(project.Id)" style="white-space: pre-line">@project.Situation</span>
                         </div>
                         <div class="alert alert-success">
                             <h2>方案</h2>
-                            <span id="projectPlan@(project.Id)" style="font-size: xx-large; line-height: normal; white-space: pre-line">@project.Plan</span>
+                            <span id="projectPlan@(project.Id)" style="white-space: pre-line">@project.Plan</span>
                         </div>
-                        <div class="well" style="font-size: xx-large;">
-                            負責人：<span id="projectDirector@(project.Id)">@project.Director</span>
+                        <div class="well">
+                            <b>負責人：</b><span id="projectDirector@(project.Id)">@project.Director</span>
                         </div>
                     </div>
                     isFirstElement = false;
@@ -235,4 +265,3 @@
         </div>
     </div>
 </div>
-}

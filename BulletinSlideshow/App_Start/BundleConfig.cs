@@ -9,6 +9,7 @@ namespace BulletinSlideshow
         public static void RegisterBundles(BundleCollection bundles)
         {
             #region Javascripts
+
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
@@ -30,9 +31,11 @@ namespace BulletinSlideshow
 
             bundles.Add(new ScriptBundle("~/bundles/signalr").Include(
                         "~/Scripts/jquery.signalR-{version}.js"));
+
             #endregion
 
             #region CSS
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/normalize.css",
                         "~/Content/site.css"));
@@ -56,6 +59,7 @@ namespace BulletinSlideshow
                         "~/Content/bootstrap.css",
                         "~/Content/bootstrap-responsive.css",
                         "~/Content/font-awesome.css"));
+
             #endregion
         }
     }

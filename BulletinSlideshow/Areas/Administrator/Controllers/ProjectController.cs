@@ -41,6 +41,8 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
 
         public ActionResult Create()
         {
+            ViewBag.Today = DateTime.Now.ToString("yyyy/MM/dd");
+
             return View();
         }
 
@@ -53,11 +55,13 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
         {
             if (ModelState.IsValid)
             {
+                project.LastUpdateOn = DateTime.Now;
+
                 db.Projects.Add(project);
                 db.SaveChanges();
 
                 // Notification frontend to add project
-                hubContext.Clients.All.addProject(project);
+                hubContext.Clients.All.addProject(project, project.ExpectSolveDate.ToString("yyyy/MM/dd"), project.LastUpdateOn.Value.ToString("yyyy/MM/dd"));
 
                 return RedirectToAction("Index");
             }
@@ -75,6 +79,8 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.ExpectDate = project.ExpectSolveDate.ToString("yyyy/MM/dd");
+
             return View(project);
         }
 
@@ -93,7 +99,7 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
                 db.SaveChanges();
 
                 // Notification frontend to edit project
-                hubContext.Clients.All.editProject(project);
+                hubContext.Clients.All.editProject(project, project.ExpectSolveDate.ToString("yyyy/MM/dd"), project.LastUpdateOn.Value.ToString("yyyy/MM/dd"));
 
                 return RedirectToAction("Index");
             }

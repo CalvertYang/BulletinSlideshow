@@ -28,7 +28,7 @@ namespace BulletinSlideshow.Models
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime CreateOn { get; set; }
 
-        [Display(Name = "最後編輯日期")]
+        [Display(Name = "最後更新日期")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime? LastUpdateOn { get; set; }

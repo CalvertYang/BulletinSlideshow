@@ -188,6 +188,10 @@
     <Compile Include="Migrations\201307150826573_ModifyMessage.Designer.cs">
       <DependentUpon>201307150826573_ModifyMessage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201307170705051_AddExpectSolveDateColumn.cs" />
+    <Compile Include="Migrations\201307170705051_AddExpectSolveDateColumn.Designer.cs">
+      <DependentUpon>201307170705051_AddExpectSolveDateColumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BulletinSlideshowContext.cs" />
     <Compile Include="Models\Project.cs" />
@@ -364,6 +368,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201307150826573_ModifyMessage.resx">
       <DependentUpon>201307150826573_ModifyMessage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201307170705051_AddExpectSolveDateColumn.resx">
+      <DependentUpon>201307170705051_AddExpectSolveDateColumn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

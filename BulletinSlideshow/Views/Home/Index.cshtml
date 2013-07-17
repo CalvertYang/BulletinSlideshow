@@ -125,7 +125,9 @@
             };
 
             // Project Block
-            push.client.addProject = function (project) {
+            push.client.addProject = function (project, expectSolveDate, lastUpdateOn) {
+                console.log(expectSolveDate);
+                console.log(lastUpdateOn);
                 $('#project').parent().parent().css("display", "");
 
                 // Add Tab
@@ -136,21 +138,25 @@
                 );
                 $('#project .tab-content').append(
                     '<div class="tab-pane" id="projectTab' + project.Id + '" style="height: 550px;">' +
+                    '<div class="pull-right"><b>最後更新日期：</b><span id="lastUpdateTime' + project.Id + '">' + lastUpdateOn + '</span></div>' +
                     '<h1 id="projectTitle' + project.Id + '">' + project.Name + '</h1>' +
                     '<div class="alert alert-block"><h2>現狀</h2>' +
-                    '<span id="projectSituation' + project.Id + '" style="white-space: pre-line">' + project.Situation + '</span>' +
-                    '</div><div class="alert alert-success"><h2>方案</h2>' +
-                    '<span id="projectPlan' + project.Id + '" style="white-space: pre-line">' + project.Plan + '</span>' +
-                    '</div><div class="well"><b>負責人：</b><span id="projectDirector' + project.Id + '">' + project.Director + '</span></div></div>'
+                    '<span id="projectSituation' + project.Id + '" style="white-space: pre-line">' + project.Situation + '</span></div>' +
+                    '<div class="alert alert-success"><h2>方案</h2>' +
+                    '<span id="projectPlan' + project.Id + '" style="white-space: pre-line">' + project.Plan + '</span></div>' +
+                    '<div class="well"><b>負責人：</b><span id="projectDirector' + project.Id + '">' + project.Director + '</span></div>' +
+                    '<div class="well well-small"><b>預計解決日期：</b><span id="expectSolveDate' + project.Id + '">' + expectSolveDate + '</span></div>'
                 );
             };
 
-            push.client.editProject = function (project) {
+            push.client.editProject = function (project, expectSolveDate, lastUpdateOn) {
                 $('#projectNavTab' + project.Id + ' > a').text(project.Name);
                 $('#projectTitle' + project.Id).text(project.Name);
+                $('#lastUpdateTime' + project.Id).text(lastUpdateOn);
                 $('#projectSituation' + project.Id).text(project.Situation);
                 $('#projectPlan' + project.Id).text(project.Plan);
                 $('#projectDirector' + project.Id).text(project.Director);
+                $('#expectSolveDate' + project.Id).text(expectSolveDate);
             };
 
             push.client.deleteProject = function (projectId) {
@@ -246,6 +252,7 @@
                 @foreach (var project in ViewBag.Project)
                 {
                     <div class="tab-pane@{if (isFirstElement) {<text> active</text>}}" id="projectTab@(project.Id)" style="height:550px;">
+                        <div class="pull-right"><b>最後更新日期：</b><span id="lastUpdateTime@(project.Id)">@project.LastUpdateOn.ToString("yyyy/MM/dd")</span></div>
                         <h1 id="projectTitle@(project.Id)">@project.Name</h1>
                         <div class="alert alert-block">
                             <h2>現狀</h2>
@@ -257,6 +264,9 @@
                         </div>
                         <div class="well">
                             <b>負責人：</b><span id="projectDirector@(project.Id)">@project.Director</span>
+                        </div>
+                        <div class="well well-small">
+                            <b>預計解決日期：</b><span id="expectSolveDate@(project.Id)">@project.ExpectSolveDate.ToString("yyyy/MM/dd")</span>
                         </div>
                     </div>
                     isFirstElement = false;

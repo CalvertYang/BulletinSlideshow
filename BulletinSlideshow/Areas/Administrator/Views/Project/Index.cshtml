@@ -42,6 +42,7 @@
                 <th>@Html.DisplayNameFor(model => model.Situation)</th>
                 <th>@Html.DisplayNameFor(model => model.Plan)</th>
                 <th class="span2">@Html.DisplayNameFor(model => model.Director)</th>
+                <th class="span2">@Html.DisplayNameFor(model => model.ExpectSolveDate)</th>
                 <th class="span2">@Html.DisplayNameFor(model => model.CreateOn)</th>
                 <th class="span2">@Html.DisplayNameFor(model => model.LastUpdateOn)</th>
                 <th class="span2">@Html.RouteLink("新增", "Administrator", new { controller = "Project", action = "Create" }, new { @class = "btn btn-small btn-success" })</th>
@@ -54,6 +55,7 @@
                     <td style="white-space: pre-line">@Html.DisplayFor(modelItem => item.Situation)</td>
                     <td style="white-space: pre-line">@Html.DisplayFor(modelItem => item.Plan)</td>
                     <td>@Html.DisplayFor(modelItem => item.Director)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ExpectSolveDate)</td>
                     <td>@Html.DisplayFor(modelItem => item.CreateOn)</td>
                     <td>@Html.DisplayFor(modelItem => item.LastUpdateOn)</td>
                     <td>

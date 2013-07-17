@@ -38,6 +38,13 @@
                         @Html.EditorFor(model => model.Director)
                         @Html.ValidationMessageFor(model => model.Director, null, new { @class = "add-on" })
                     </div>
+
+                    <div id="expectDate" class="input-prepend offset1 date input-append">
+                        @Html.LabelFor(model => model.ExpectSolveDate, new { @class = "add-on" })
+                        @Html.TextBoxFor(model => model.ExpectSolveDate, new { @readonly = "readonly" })
+                        <span class="add-on"><i class="icon-calendar"></i></span>
+                        @Html.ValidationMessageFor(model => model.ExpectSolveDate)
+                    </div>
                 </div>
 
                 <div class="controls pull-right">
@@ -54,5 +61,11 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script>
         $('#Name').focus();
+        
+        $('#ExpectSolveDate').attr('value', '@ViewBag.Today');
+        $('#expectDate').datepicker({
+            format: "yyyy/mm/dd",
+            autoclose: true
+        });
     </script>
 }

@@ -3,22 +3,33 @@
 @{
     ViewBag.Title = "Bulletin Slideshow";
 }
-
+@*<script src="https://rawgithub.com/timrwood/moment/2.1.0/min/moment.min.js"></script>*@
 @section scripts {
-    <script>
-        $(function () {
-            var slideInterval = @ViewBag.Parameter.SlideInterval
+    <script> $(function () {
+        var slideInterval = @ViewBag.Parameter.SlideInterval
 
-            $('.notifyMessage').marquee({
-                speed: 7000,
-                gap: 50,
-                delayBeforeStart: 0,
-                direction: 'left',
-                duplicated: false
-            });
+        $('.notifyMessage').marquee({
+            speed: 7000,
+            gap: 50,
+            delayBeforeStart: 0,
+            direction: 'left',
+            duplicated: false
+        });
 
-            // Information Tab
-            var infoTabCarousel = setInterval(function () {
+        // Information Tab
+        var infoTabCarousel = setInterval(function () {
+            var tabs = $('#information .nav-tabs > li'),
+                active = tabs.filter('.active'),
+                next = active.next('li'),
+                toClick = next.length ? next.find('a') : tabs.eq(0).find('a');
+
+            toClick.tab('show');
+        }, slideInterval);
+
+        $('#information').mouseover(function () {
+            clearInterval(infoTabCarousel);
+        }).mouseout(function () {
+            infoTabCarousel = setInterval(function () {
                 var tabs = $('#information .nav-tabs > li'),
                     active = tabs.filter('.active'),
                     next = active.next('li'),
@@ -26,22 +37,22 @@
 
                 toClick.tab('show');
             }, slideInterval);
+        });
 
-            $('#information').mouseover(function () {
-                clearInterval(infoTabCarousel);
-            }).mouseout(function () {
-                infoTabCarousel = setInterval(function () {
-                    var tabs = $('#information .nav-tabs > li'),
-                        active = tabs.filter('.active'),
-                        next = active.next('li'),
-                        toClick = next.length ? next.find('a') : tabs.eq(0).find('a');
+        // Project Tab
+        var projectTabCarousel = setInterval(function () {
+            var tabs = $('#project .nav-tabs > li'),
+                active = tabs.filter('.active'),
+                next = active.next('li'),
+                toClick = next.length ? next.find('a') : tabs.eq(0).find('a');
 
-                    toClick.tab('show');
-                }, slideInterval);
-            });
+            toClick.tab('show');
+        }, slideInterval);
 
-            // Project Tab
-            var projectTabCarousel = setInterval(function () {
+        $('#project').mouseover(function () {
+            clearInterval(projectTabCarousel);
+        }).mouseout(function () {
+            projectTabCarousel = setInterval(function () {
                 var tabs = $('#project .nav-tabs > li'),
                     active = tabs.filter('.active'),
                     next = active.next('li'),
@@ -49,136 +60,165 @@
 
                 toClick.tab('show');
             }, slideInterval);
+        });
 
-            $('#project').mouseover(function () {
-                clearInterval(projectTabCarousel);
-            }).mouseout(function () {
-                projectTabCarousel = setInterval(function () {
-                    var tabs = $('#project .nav-tabs > li'),
-                        active = tabs.filter('.active'),
-                        next = active.next('li'),
-                        toClick = next.length ? next.find('a') : tabs.eq(0).find('a');
+        // SignalR
+        var push = $.connection.pushNotification;
 
-                    toClick.tab('show');
-                }, slideInterval);
-            });
+        push.client.refreshPage = function () {
+            location.reload();
+        };
 
-            // SignalR
-            var push = $.connection.pushNotification;
+        // Information Block
+        push.client.addInformationCategory = function (category) {
+            $('#information').parent().parent().css("display", "");
 
-            push.client.refreshPage = function () {
-                location.reload();
-            };
+            var tab = '<li id="infoNavTab{{Id}}">' +
+                      '<a href="#infoTab{{Id}}" data-toggle="tab">{{Name}}</a>' +
+                      '</li>';
+            var content = '<div class="tab-pane" id="infoTab{{Id}}" style="height:200px;">' +
+                          '<h1 id="infoTitle{{Id}}">{{Name}}</h1>' +
+                          '<ul style="margin-left:30px;"></ul>' +
+                          '</div>';
+            var categoryData = { Id: category.Id, Name: category.Name };
 
-            // Information Block
-            push.client.addInformationCategory = function (category) {
-                $('#information').parent().parent().css("display", "");
-
-                $('#information .nav-tabs').append(
-                    '<li id="infoNavTab'+ category.Id + '"><a href="#infoTab' +
-                    category.Id + '" data-toggle="tab">' + category.Name +
-                    '</a></li>'
-                );
-                $('#information .tab-content').append(
-                    '<div class="tab-pane" id="infoTab' + category.Id + '" style="height:200px;">' +
-                    '<h1 id="infoTitle' + category.Id + '">' +
-                    category.Name + '</h1><ul style="margin-left:30px;"></ul></div>'
-                );
-            };
-
-            push.client.editInformationCategory = function (category) {
-                $('#infoNavTab' + category.Id + ' > a').text(category.Name);
-                $('#infoTitle' + category.Id).text(category.Name);
-            };
-
-            push.client.deleteInformationCategory = function (categoryId) {
-                $('#infoNavTab' + categoryId).remove();
-                $('#infoTab' + categoryId).remove();
-
-                // Hide project tab
-                if ($('#information .nav-tabs').children().length == 0) {
-                    $('#information').parent().parent().css("display", "none");
-                }
-            };
+            $('#information .nav-tabs').append(
+                S(tab).template(categoryData).s
+            );
             
-            push.client.addInformationContent = function (information) {
+            $('#information .tab-content').append(
+                S(content).template(categoryData).s
+            );
+        };
+
+        push.client.editInformationCategory = function (category) {
+            $('#infoNavTab' + category.Id + ' > a').text(category.Name);
+            $('#infoTitle' + category.Id).text(category.Name);
+        };
+
+        push.client.deleteInformationCategory = function (categoryId) {
+            $('#infoNavTab' + categoryId).remove();
+            $('#infoTab' + categoryId).remove();
+
+            // Hide project tab
+            if ($('#information .nav-tabs').children().length == 0) {
+                $('#information').parent().parent().css("display", "none");
+            }
+        };
+        
+        push.client.addInformationContent = function (information) {
+            $('#infoTab' + information.CategoryId + ' > ul').append(
+                '<li id="infoContent' + information.Id + '">' + information.Content + '</li>'
+            );
+        };
+
+        push.client.editInformationContent = function (information) {
+            var parentId = $('#infoContent' + information.Id).parent().parent().attr('id').replace('infoTab', '');
+
+            if (parentId == information.CategoryId) {
+                $('#infoContent' + information.Id).text(information.Content);
+            } else {
+                $('#infoContent' + information.Id).remove();
                 $('#infoTab' + information.CategoryId + ' > ul').append(
                     '<li id="infoContent' + information.Id + '">' + information.Content + '</li>'
                 );
+            }
+        };
+
+        push.client.deleteInformationContent = function (informationId) {
+            $('#infoContent' + informationId).remove();
+        };
+
+        // Project Block
+        push.client.addProject = function (project, expectSolveDate, lastUpdateOn) {
+            $('#project').parent().parent().css("display", "");
+
+            var tab = '<li id="projectNavTab{{Id}}">' +
+                      '<a href="#projectTab{{Id}}" data-toggle="tab">{{Name}}</a>' +
+                      '</li>';
+            var content = '<div class="tab-pane" id="projectTab{{Id}}" style="height: 550px;">' +
+                              '<div class="pull-right">' +
+                                  '<b>最後更新日期：</b><span id="lastUpdateTime{{Id}}">{{LastUpdateOn}}</span>' +
+                              '</div>' +
+                              '<h1 id="projectTitle{{Id}}">{{Name}}</h1>' +
+                              '<div class="alert alert-block">' +
+                                  '<h2>現狀</h2><span id="projectSituation{{Id}}" style="white-space: pre-line">{{Situation}}</span>' +
+                              '</div>' +
+                              '<div class="alert alert-success">' +
+                                  '<h2>方案</h2><span id="projectPlan{{Id}}" style="white-space: pre-line">{{Plan}}</span>' +
+                              '</div>' +
+                              '<div class="well">' +
+                                  '<b>負責人：</b><span id="projectDirector{{Id}}">{{Director}}</span>' +
+                              '</div>' +
+                              '<div class="well well-small">' +
+                                  '<b>預計解決日期：</b><span id="expectSolveDate{{Id}}">{{ExpectSolveDate}}</span>' +
+                              '</div></div>';
+            var projectData = {
+                Id: project.Id,
+                Name: project.Name,
+                Situation: project.Situation,
+                Plan: project.Plan,
+                Director: project.Director,
+                ExpectSolveDate: expectSolveDate,
+                LastUpdateOn: lastUpdateOn
             };
 
-            push.client.editInformationContent = function (information) {
-                var parentId = $('#infoContent' + information.Id).parent().parent().attr('id').replace('infoTab', '');
+            // Add Tab
+            $('#project .nav-tabs').append(
+                S(tab).template(projectData).s
+            );
+            $('#project .tab-content').append(
+                S(content).template(projectData).s
+            );
 
-                if (parentId == information.CategoryId) {
-                    $('#infoContent' + information.Id).text(information.Content);
-                } else {
-                    $('#infoContent' + information.Id).remove();
-                    $('#infoTab' + information.CategoryId + ' > ul').append(
-                        '<li id="infoContent' + information.Id + '">' + information.Content + '</li>'
-                    );
-                }
-            };
+            // Determine whether add blink effect or not
+            var today = Date.parse(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
+            var expectDate = Date.parse(expectSolveDate);
+            if (today - expectDate > 0) {
+                console.log("#expectSolveDate" + project.Id + " timeout!!!!");
+                $('#expectSolveDate' + project.Id).parent().attr("id", "blinkBackground");
+            }
+        };
+        push.client.editProject = function (project, expectSolveDate, lastUpdateOn) {
+            $('#projectNavTab' + project.Id + ' > a').text(project.Name);
+            $('#projectTitle' + project.Id).text(project.Name);
+            $('#lastUpdateTime' + project.Id).text(lastUpdateOn);
+            $('#projectSituation' + project.Id).text(project.Situation);
+            $('#projectPlan' + project.Id).text(project.Plan);
+            $('#projectDirector' + project.Id).text(project.Director);
+            $('#expectSolveDate' + project.Id).text(expectSolveDate);
 
-            push.client.deleteInformationContent = function (informationId) {
-                $('#infoContent' + informationId).remove();
-            };
+            // Determine whether add blink effect or not
+            var today = Date.parse(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
+            var expectDate = Date.parse(expectSolveDate);
+            if (today - expectDate > 0) {
+                console.log("#expectSolveDate" + project.Id + " timeout!!!!");
+                $('#expectSolveDate' + project.Id).parent().attr("id", "blinkBackground");
+            } else {
+                $('#expectSolveDate' + project.Id).parent().removeAttr("id");
+            }
+        };
 
-            // Project Block
-            push.client.addProject = function (project, expectSolveDate, lastUpdateOn) {
-                console.log(expectSolveDate);
-                console.log(lastUpdateOn);
-                $('#project').parent().parent().css("display", "");
-
-                // Add Tab
-                $('#project .nav-tabs').append(
-                    '<li id="projectNavTab' + project.Id + '"><a href="#projectTab' +
-                    project.Id + '" data-toggle="tab">' + project.Name +
-                    '</a></li>'
-                );
-                $('#project .tab-content').append(
-                    '<div class="tab-pane" id="projectTab' + project.Id + '" style="height: 550px;">' +
-                    '<div class="pull-right"><b>最後更新日期：</b><span id="lastUpdateTime' + project.Id + '">' + lastUpdateOn + '</span></div>' +
-                    '<h1 id="projectTitle' + project.Id + '">' + project.Name + '</h1>' +
-                    '<div class="alert alert-block"><h2>現狀</h2>' +
-                    '<span id="projectSituation' + project.Id + '" style="white-space: pre-line">' + project.Situation + '</span></div>' +
-                    '<div class="alert alert-success"><h2>方案</h2>' +
-                    '<span id="projectPlan' + project.Id + '" style="white-space: pre-line">' + project.Plan + '</span></div>' +
-                    '<div class="well"><b>負責人：</b><span id="projectDirector' + project.Id + '">' + project.Director + '</span></div>' +
-                    '<div class="well well-small"><b>預計解決日期：</b><span id="expectSolveDate' + project.Id + '">' + expectSolveDate + '</span></div>'
-                );
-            };
-
-            push.client.editProject = function (project, expectSolveDate, lastUpdateOn) {
-                $('#projectNavTab' + project.Id + ' > a').text(project.Name);
-                $('#projectTitle' + project.Id).text(project.Name);
-                $('#lastUpdateTime' + project.Id).text(lastUpdateOn);
-                $('#projectSituation' + project.Id).text(project.Situation);
-                $('#projectPlan' + project.Id).text(project.Plan);
-                $('#projectDirector' + project.Id).text(project.Director);
-                $('#expectSolveDate' + project.Id).text(expectSolveDate);
-            };
-
-            push.client.deleteProject = function (projectId) {
-                $('#projectNavTab' + projectId).remove();
-                $('#projectTab' + projectId).remove();
-                
-                // Hide project tab
-                if ($('#project .nav-tabs').children().length == 0) {
-                    $('#project').parent().parent().css("display", "none");
-                }
-            };
+        push.client.deleteProject = function (projectId) {
+            $('#projectNavTab' + projectId).remove();
+            $('#projectTab' + projectId).remove();
             
+            // Hide project tab
+            if ($('#project .nav-tabs').children().length == 0) {
+                $('#project').parent().parent().css("display", "none");
+            }
+        };
+        
 
-            // Connect to hub
-            $.connection.hub.start()
-            .done(function () {
-                console.log("Connection Successful.");
-            })
-            .fail(function (ex) {
-                console.log("Connection Failed.");
-            });
+        // Connect to hub
+        $.connection.hub.start()
+        .done(function () {
+            console.log("Connection Successful.");
+        })
+        .fail(function (ex) {
+            console.log("Connection Failed.");
         });
+    });
     </script>
 }
 
@@ -265,7 +305,7 @@
                         <div class="well">
                             <b>負責人：</b><span id="projectDirector@(project.Id)">@project.Director</span>
                         </div>
-                        <div class="well well-small">
+                        <div class="well well-small"@{if (project.ExpectSolveDate < DateTime.Now.Date) {<text> id="blinkBackground"</text>}}>
                             <b>預計解決日期：</b><span id="expectSolveDate@(project.Id)">@project.ExpectSolveDate.ToString("yyyy/MM/dd")</span>
                         </div>
                     </div>

@@ -64,3 +64,39 @@ textarea {
 .notifyMessage {
     overflow: hidden;
 }
+
+
+/* Styles for blink background
+-----------------------------------------------------------*/
+@-webkit-keyframes blink {
+    0% { background: rgba(255,0,0,1); }
+    100% { background: rgba(255,255,255,0); }
+}
+
+@-moz-keyframes blink {
+    0% { background: rgba(255,0,0,1); }
+    100% { background: rgba(255,255,255,0); }
+}
+
+@-ms-keyframes blink {
+    0% { background: rgba(255,0,0,1); }
+    100% { background: rgba(255,255,255,0); }
+}
+
+@-o-keyframes blink {
+    0% { background: rgba(255,0,0,1); }
+    100% { background: rgba(255,255,255,0); }
+}
+
+@keyframes blink {
+    0% { background: rgba(255,0,0,1); }
+    100% { background: rgba(255,255,255,0); }
+}
+
+#blinkBackground {
+    -webkit-animation: blink .5s linear infinite;
+    -moz-animation: blink .5s linear infinite;
+    -ms-animation: blink .5s linear infinite;
+    -o-animation: blink .5s linear infinite;
+    animation: blink .5s linear infinite;
+}

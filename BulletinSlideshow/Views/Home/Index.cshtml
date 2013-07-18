@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Bulletin Slideshow";
 }
-@*<script src="https://rawgithub.com/timrwood/moment/2.1.0/min/moment.min.js"></script>*@
+
 @section scripts {
     <script> $(function () {
         var slideInterval = @ViewBag.Parameter.SlideInterval
@@ -175,7 +175,6 @@
             var today = Date.parse(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
             var expectDate = Date.parse(expectSolveDate);
             if (today - expectDate > 0) {
-                console.log("#expectSolveDate" + project.Id + " timeout!!!!");
                 $('#expectSolveDate' + project.Id).parent().attr("id", "blinkBackground");
             }
         };
@@ -192,7 +191,6 @@
             var today = Date.parse(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
             var expectDate = Date.parse(expectSolveDate);
             if (today - expectDate > 0) {
-                console.log("#expectSolveDate" + project.Id + " timeout!!!!");
                 $('#expectSolveDate' + project.Id).parent().attr("id", "blinkBackground");
             } else {
                 $('#expectSolveDate' + project.Id).parent().removeAttr("id");

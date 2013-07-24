@@ -32,5 +32,13 @@ namespace BulletinSlideshow.Models
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime? LastUpdateOn { get; set; }
+
+        public virtual int CreatorId { get; set; }
+        [ForeignKey("CreatorId")]
+        public virtual Member Creator { get; set; }
+
+        public virtual int? ModifierId { get; set; }
+        [ForeignKey("ModifierId")]
+        public virtual Member Modifier { get; set; }
     }
 }

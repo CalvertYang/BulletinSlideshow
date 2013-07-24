@@ -40,5 +40,8 @@ namespace BulletinSlideshow.Models
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime? LastLoginOn { get; set; }
+
+        [Display(Name="啟用")]
+        public bool Activate { get; set; }
     }
 }

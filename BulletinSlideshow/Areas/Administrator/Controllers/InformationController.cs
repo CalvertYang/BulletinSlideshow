@@ -44,6 +44,7 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
             if (ModelState.IsValid)
             {
                 information.LastUpdateOn = DateTime.Now;
+                information.CreatorId = db.Members.Where(m => m.Account == User.Identity.Name).FirstOrDefault().Id;
 
                 db.Information.Add(information);
                 db.SaveChanges();
@@ -63,7 +64,7 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
 
         public ActionResult Edit(int id = 0)
         {
-            Information information = db.Information.Find(id);
+            Information information = db.Information.Include(i => i.Creator).Where(i => i.Id == id).FirstOrDefault();
             if (information == null)
             {
                 return HttpNotFound();
@@ -82,6 +83,7 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
             if (ModelState.IsValid)
             {
                 information.LastUpdateOn = DateTime.Now;
+                information.ModifierId = db.Members.Where(m => m.Account == User.Identity.Name).FirstOrDefault().Id;
 
                 db.Entry(information).State = EntityState.Modified;
                 db.SaveChanges();

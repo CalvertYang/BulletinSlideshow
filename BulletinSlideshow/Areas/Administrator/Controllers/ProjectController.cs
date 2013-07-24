@@ -56,6 +56,7 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
             if (ModelState.IsValid)
             {
                 project.LastUpdateOn = DateTime.Now;
+                project.CreatorId = db.Members.Where(m => m.Account == User.Identity.Name).FirstOrDefault().Id;
 
                 db.Projects.Add(project);
                 db.SaveChanges();
@@ -74,7 +75,7 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
 
         public ActionResult Edit(int id = 0)
         {
-            Project project = db.Projects.Find(id);
+            Project project = db.Projects.Include(p => p.Creator).Where(p => p.Id == id).FirstOrDefault();
             if (project == null)
             {
                 return HttpNotFound();
@@ -94,6 +95,7 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
             if (ModelState.IsValid)
             {
                 project.LastUpdateOn = DateTime.Now;
+                project.ModifierId = db.Members.Where(m => m.Account == User.Identity.Name).FirstOrDefault().Id;
 
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();

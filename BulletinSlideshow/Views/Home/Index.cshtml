@@ -106,21 +106,43 @@
             }
         };
         
-        push.client.addInformationContent = function (information) {
+        push.client.addInformationContent = function (information, lastUpdateOn) {
+            var content = '<li id="infoContent{{Id}}">' +
+                          '<span>{{Content}}</span>' +
+                          '<span class="badge badge-info" style="font-size:x-large; line-height:15px;">{{LastUpdateOn}}</span>' +
+                          '</li>';
+            var informationData = {
+                Id: information.Id,
+                Content: information.Content,
+                LastUpdateOn: lastUpdateOn
+            };
+
             $('#infoTab' + information.CategoryId + ' > ul').append(
-                '<li id="infoContent' + information.Id + '">' + information.Content + '</li>'
+                S(content).template(informationData).s
             );
         };
-
-        push.client.editInformationContent = function (information) {
+        
+        push.client.editInformationContent = function (information, lastUpdateOn) {
             var parentId = $('#infoContent' + information.Id).parent().parent().attr('id').replace('infoTab', '');
 
             if (parentId == information.CategoryId) {
-                $('#infoContent' + information.Id).text(information.Content);
+                $('#infoContent' + information.Id + ' > span:first').text(information.Content);
+                $('#infoContent' + information.Id + ' > span:last').text(lastUpdateOn);
             } else {
                 $('#infoContent' + information.Id).remove();
+                
+                var content = '<li id="infoContent{{Id}}">' +
+                              '<span>{{Content}}</span>' +
+                              '<span class="badge badge-info" style="font-size:x-large; line-height:15px;">{{LastUpdateOn}}</span>' +
+                              '</li>';
+                var informationData = {
+                    Id: information.Id,
+                    Content: information.Content,
+                    LastUpdateOn: lastUpdateOn
+                };
+
                 $('#infoTab' + information.CategoryId + ' > ul').append(
-                    '<li id="infoContent' + information.Id + '">' + information.Content + '</li>'
+                    S(content).template(informationData).s
                 );
             }
         };
@@ -254,7 +276,7 @@
 
                                 if (info.CategoryId == category.Id)
                                 {
-                                <li id="infoContent@(info.Id)">@info.Content</li>
+                                <li id="infoContent@(info.Id)"><span>@(info.Content)</span><span class="badge badge-info" style="font-size:x-large; line-height:15px;">@info.LastUpdateOn.Value.ToString("yyyy/MM/dd")</span></li>
                                 }
                             }
                         </ul>

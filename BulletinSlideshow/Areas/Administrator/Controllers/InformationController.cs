@@ -21,7 +21,7 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
 
         public ActionResult Index()
         {
-            var information = db.Information.Include(i => i.Category);
+            var information = db.Information.Include(i => i.Category).OrderBy(i => i.CategoryId);
             return View(information.ToList());
         }
 
@@ -43,11 +43,13 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
         {
             if (ModelState.IsValid)
             {
+                information.LastUpdateOn = DateTime.Now;
+
                 db.Information.Add(information);
                 db.SaveChanges();
 
                 // Notification frontend to add information
-                hubContext.Clients.All.addInformationContent(information);
+                hubContext.Clients.All.addInformationContent(information, information.LastUpdateOn.Value.ToString("yyyy/MM/dd"));
 
                 return RedirectToAction("Index");
             }
@@ -85,7 +87,7 @@ namespace BulletinSlideshow.Areas.Administrator.Controllers
                 db.SaveChanges();
 
                 // Notification frontend to edit information
-                hubContext.Clients.All.editInformationContent(information);
+                hubContext.Clients.All.editInformationContent(information, information.LastUpdateOn.Value.ToString("yyyy/MM/dd"));
 
                 return RedirectToAction("Index");
             }
